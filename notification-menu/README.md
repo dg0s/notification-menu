@@ -1,30 +1,57 @@
-# Paper Slider
+# Notification Menu for Vaadin 14+
 
-Vaadin 14 Java integration of @polymer/paper-slider
+## Usage
 
-## Development instructions
+Some examples of this component usage:
 
-JavaScript modules can either be published as an NPM package or be kept as local 
-files in your project. The local JavaScript modules should be put in 
-`src/main/resources/META-INF/frontend` so that they are automatically found and 
-used in the using application.
+```java
+static final List<NotificationItem> items = new ArrayList<NotificationItem>() {{
+    add(new NotificationItem(NotificationType.INFO, "Movie Release", "John Wick 4 is coming soon!"));
+    add(new NotificationItem(NotificationType.SUCCESS, "Movie Release", "The Matrix Resurrections is coming soon!"));
+}};
 
-If the modules are published then the package should be noted in the component 
-using the `@NpmPackage` annotation in addition to using `@JsModule` annotation.
-
-
-Starting the test/demo server:
-1. Run `mvn jetty:run`.
-2. Open http://localhost:8080 in the browser.
-
-## Publishing to Vaadin Directory
-
-You can create the zip package needed for [Vaadin Directory](https://vaadin.com/directory/) using
+final NotificationMenu notificationMenu = new NotificationMenu();
+notificationMenu.setItems(items);
+        
+notificationMenu.addItemClickEventListener(event -> {
+    final NotificationItem selectedItem = event.getSelectedItem();
+    Notification.show(selectedItem.getDescription(), 5000, Notification.Position.TOP_END).open();
+    final int index = items.indexOf(selectedItem);
+    items.get(index).markAsRead();
+    notificationMenu.setItems(items);
+});
+        
+notificationMenu.addViewAllClickEventListener(event -> {
+    Notification.show("Option 'View all' clicked!", 5000, Notification.Position.TOP_END).open();
+});
+        
+notificationMenu.addMarkAllAsReadClickEventListener(event -> {
+    Notification.show("Option 'Mark all as read' clicked!", 5000, Notification.Position.TOP_END).open();
+    items.forEach(NotificationItem::markAsRead);
+    notificationMenu.setItems(items);
+});
 ```
-mvn versions:set -DnewVersion=1.0.0 # You cannot publish snapshot versions 
-mvn install -Pdirectory
+
+## Setting up for development:
+
+Clone the project in GitHub
+
+```
+git clone git@github.com:dg0s/notification-menu.git
 ```
 
-The package is created as `target/paper-slider-1.0.0.zip`
+to install project, to your maven repository run
 
-For more information or to upload the package, visit https://vaadin.com/directory/my-components?uploadNewComponent
+```mvn install```
+
+
+## How to run the demo?
+
+The Demo can be run going to the project `notification-menu-demo` and executing the maven goal:
+
+```mvn spring-boot:run```
+
+
+# License & Author
+
+Apache License 2
