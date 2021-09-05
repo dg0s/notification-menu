@@ -37,7 +37,7 @@ notificationMenu.addMarkAllAsReadClickEventListener(event -> {
 Clone the project in GitHub
 
 ```
-git clone git@github.com:vaadin-component-factory/autosuggest.git
+git clone git@github.com:dg0s/notification-menu.git
 ```
 
 to install project, to your maven repository run
