@@ -185,7 +185,7 @@ export class NotificationMenu extends LitElement {
                         </div>
                     </paper-dialog-scrollable>
                     <div class="menu-item-footer">
-                        <h4 @click="${this._onViewAll}" id="view-all" class="menu-header">View All</h4>
+                        <h4 @click="${this._onViewAll}" id="view-all" class="menu-header">View all</h4>
                         <h4 @click="${this._onMarkAllAsRead}" class="menu-header">Mark all as read</h4>
                     </div>
                 </paper-dialog>

@@ -1,4 +1,4 @@
-package org.dgos.vaadin.notification;
+package org.vaadin.addons.dgos.notification;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;

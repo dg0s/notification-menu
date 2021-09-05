@@ -1,4 +1,4 @@
-package org.dgos.vaadin.notification;
+package org.vaadin.addons.dgos.notification;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

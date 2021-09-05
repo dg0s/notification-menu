@@ -1,4 +1,4 @@
-package org.dgos.vaadin.notification.demo;
+package org.vaadin.addons.dgos.notification.demo;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.notification.Notification;
@@ -7,10 +7,10 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
-import org.dgos.vaadin.notification.NotificationItem;
-import org.dgos.vaadin.notification.NotificationMenu;
-import org.dgos.vaadin.notification.NotificationType;
-import org.dgos.vaadin.notification.Orientation;
+import org.vaadin.addons.dgos.notification.NotificationItem;
+import org.vaadin.addons.dgos.notification.NotificationMenu;
+import org.vaadin.addons.dgos.notification.NotificationType;
+import org.vaadin.addons.dgos.notification.Orientation;
 
 import java.util.ArrayList;
 import java.util.List;

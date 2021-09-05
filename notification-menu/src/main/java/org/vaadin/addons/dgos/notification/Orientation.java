@@ -1,4 +1,4 @@
-package org.dgos.vaadin.notification;
+package org.vaadin.addons.dgos.notification;
 
 public enum Orientation {
     LEFT("right"),

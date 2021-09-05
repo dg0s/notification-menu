@@ -1,4 +1,4 @@
-package org.dgos.vaadin.notification.demo;
+package org.vaadin.addons.dgos.notification.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
