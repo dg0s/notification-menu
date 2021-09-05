@@ -3,7 +3,7 @@
 
     <groupId>org.dgos.vaadin</groupId>
     <artifactId>notification-menu</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>Notification Menu</name>
     <packaging>jar</packaging>
 
