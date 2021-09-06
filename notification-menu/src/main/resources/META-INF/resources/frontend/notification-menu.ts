@@ -1,7 +1,6 @@
 import {css, customElement, html, LitElement, property, PropertyValues, state} from 'lit-element';
 import '@polymer/paper-dialog/paper-dialog.js';
-import '@vaadin/vaadin-ordered-layout/src/vaadin-horizontal-layout.js';
-import '@vaadin/vaadin-button/src/vaadin-button.js';
+import '@vaadin/vaadin-button/vaadin-button.js';
 import '@vaadin/vaadin-item/vaadin-item.js';
 import '@polymer/iron-icon/iron-icon.js';
 import {query} from 'lit-element/lib/decorators.js';
