@@ -51,6 +51,9 @@ The Demo can be run going to the project `notification-menu-demo` and executing 
 
 ```mvn spring-boot:run```
 
+## How to deploy
+
+```mvn clean install -Pproduction,directory```
 
 # License & Author
 

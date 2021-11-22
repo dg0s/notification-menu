@@ -43,6 +43,14 @@ export class NotificationMenu extends LitElement {
             border-bottom: 1px solid var(--lumo-contrast-5pct);
             margin:0;
             padding: 0 15px;
+            overflow: overlay;
+            webkit-overflow-scrolling: var(--layout-scroll_-_-webkit-overflow-scrolling);
+            overflow: var(--layout-scroll_-_overflow);
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+          }
+          .menu-scrollable::-webkit-scrollbar {
+             display: none;
           }
           .menu-item{
             min-width: 0px;
@@ -83,7 +91,6 @@ export class NotificationMenu extends LitElement {
           .content{
             height: 270px;
             padding-top: 10px;
-            overflow: overlay;          
           }
           .menu-action-view{
             width: 100%;
@@ -101,8 +108,8 @@ export class NotificationMenu extends LitElement {
             margin: 0;
             padding: 0 15px;
             color: var(--lumo-primary-text-color);
-            cursor: pointer;
           }
+          .menu-item-footer span {cursor: pointer;}
           .menu-item-footer .menu-header:first-child{flex: 1 0 auto;padding: 0;}
           .menu-item-footer .menu-header:nth-child(2){text-align: end;padding: 0;}
           
@@ -184,8 +191,8 @@ export class NotificationMenu extends LitElement {
                         </div>
                     </paper-dialog-scrollable>
                     <div class="menu-item-footer">
-                        <h4 @click="${this._onViewAll}" id="view-all" class="menu-header">View all</h4>
-                        <h4 @click="${this._onMarkAllAsRead}" class="menu-header">Mark all as read</h4>
+                        <h4 id="view-all" class="menu-header"><span @click="${this._onViewAll}">View all</span></h4>
+                        <h4 class="menu-header"><span @click="${this._onMarkAllAsRead}">Mark all as read</span></h4>
                     </div>
                 </paper-dialog>
             </div>
