@@ -12,12 +12,12 @@
 
     <artifactId>notification-menu-demo</artifactId>
     <groupId>org.vaadin.addons.dgos</groupId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
 
     <properties>
-        <vaadin.version>14.6.8</vaadin.version>
+        <vaadin.version>14.8.3</vaadin.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
