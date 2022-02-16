@@ -20,6 +20,8 @@ export class NotificationMenu extends LitElement {
     @property({type: Boolean}) ringBell = false;
     @property({type: Boolean}) closeOnClick = true;
     @property({type: Number}) _unread = 0;
+    @property({type: Number}) maxItemCount = 99;
+    @property({type: String}) maxItemCountLabel = "+99";
 
     @state()
     private notifications: NotificationItem[] = [];
@@ -170,7 +172,7 @@ export class NotificationMenu extends LitElement {
                 <vaadin-button theme="icon tertiary" @click="${this._onButtonClick}">
                     <iron-icon id="bell" class="bell" icon="vaadin:bell" slot="prefix"></iron-icon>
                     <span class="badge" slot="suffix"
-                          ?hidden="${this._unread < 1}">${this._unread > 99 ? '+99' : this._unread}</span>
+                          ?hidden="${this._unread < 1}">${this._unread > this.maxItemCount ? this.maxItemCountLabel : this._unread}</span>
                 </vaadin-button>
                 <paper-dialog id="dialog" class="dialog" no-overlap horizontal-align="${this.orientation}"
                               vertical-align="top">
