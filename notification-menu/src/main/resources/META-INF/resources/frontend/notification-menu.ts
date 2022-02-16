@@ -20,6 +20,7 @@ export class NotificationMenu extends LitElement {
     @property({type: String}) labelMarkAllAsRead = 'Mark all as read';
     @property({type: String}) labelViewAll = 'View all';
     @property({type: String}) dateTimeFormatPattern = 'YYYY/MM/DD HH:mm';
+    @property({type: String}) icon = 'vaadin:bell';
     @property({type: Boolean}) ringBell = false;
     @property({type: Boolean}) closeOnClick = true;
     @property({type: Number}) _unread = 0;
@@ -173,7 +174,7 @@ export class NotificationMenu extends LitElement {
         return html`
             <div>
                 <vaadin-button theme="icon tertiary" @click="${this._onButtonClick}">
-                    <iron-icon id="bell" class="bell" icon="vaadin:bell" slot="prefix"></iron-icon>
+                    <iron-icon id="bell" class="bell" icon="${this.icon}" slot="prefix"></iron-icon>
                     <span class="badge" slot="suffix"
                           ?hidden="${this._unread < 1}">${this._unread > this.maxItemCount ? this.maxItemCountLabel : this._unread}</span>
                 </vaadin-button>
