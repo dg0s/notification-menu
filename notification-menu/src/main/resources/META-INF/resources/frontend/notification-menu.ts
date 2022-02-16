@@ -115,7 +115,7 @@ export class NotificationMenu extends LitElement {
           .unknown{border-left-color: var(--lumo-shade-70pct);}
           .info{border-left-color: var(--lumo-primary-color);}
           .success{border-left-color: var(--lumo-success-color);}
-          .warning{border-left-color: #f0ad4e;}
+          .warning{border-left-color: var(--notification-menu-type-warning, #f0ad4e);}
           .danger{border-left-color: var(--lumo-error-color);}
           [hidden]{visibility:hidden;}
           
