@@ -43,18 +43,18 @@ public class CustomComponentView extends VerticalLayout {
         createSample("Basic notification");
 
         NotificationMenu maxItemCount = createSample("Custom max item counter");
-//        maxItemCount.setMaxItemCount(5);
-//        maxItemCount.setMaxItemCountLabel("Max.");
+        maxItemCount.setMaxItemCount(5);
+        maxItemCount.setMaxItemCountLabel("Max.");
 
         NotificationMenu customIcon = createSample("Custom icon");
-//        customIcon.setIcon(VaadinIcon.MAILBOX);
+        customIcon.setIcon(VaadinIcon.MAILBOX);
 
         // i18n German
         NotificationMenu i18n = createSample("i18n");
-        //        i18n.setTitle("Benachrichtigungen");
-        //        i18n.setDateTimeFormatPattern("dd.MM.yyyy, HH:mm");
-        //        i18n.setLabelViewAll("Alle öffnen");
-        //        i18n.setLabelMarkAllAsRead("Alle als gelesen markieren");
+                i18n.setTitle("Benachrichtigungen");
+                i18n.setDateTimeFormatPattern("dd.MM.yyyy, HH:mm");
+                i18n.setLabelViewAll("Alle öffnen");
+                i18n.setLabelMarkAllAsRead("Alle als gelesen markieren");
     }
 
     private void createToolbar() {
@@ -84,22 +84,22 @@ public class CustomComponentView extends VerticalLayout {
 
         Button clearAll = new Button("Clear all", event -> notificationMenus.forEach(n -> n.setItems()));
 
-        actionsLayout.add(left, right, addNotification/*, new Button("Clear", event -> {
+        actionsLayout.add(left, right, addNotification, new Button("Clear", event -> {
             items.clear();
             notificationMenus.forEach(n -> n.clearAll());
         }), new Button("Mark all as read", event -> {
             notificationMenus.forEach(n -> n.markAllAsRead());
         }), new Button("View all", event -> {
             notificationMenus.forEach(n -> n.viewAll());
-        })*/);
+        }));
 
 
         Checkbox viewAllVisible = new Checkbox("View all visible", true);
         Checkbox markAllVisible = new Checkbox("Mark all visible", true);
         HorizontalLayout secondActionLayout = new HorizontalLayout(viewAllVisible, markAllVisible);
 
-//        viewAllVisible.addValueChangeListener(event -> notificationMenus.forEach(n -> n.setViewAllButtonVisible(event.getValue())));
-//        markAllVisible.addValueChangeListener(event -> notificationMenus.forEach(n -> n.setMarkAllButtonVisible(event.getValue())));
+        viewAllVisible.addValueChangeListener(event -> notificationMenus.forEach(n -> n.setViewAllButtonVisible(event.getValue())));
+        markAllVisible.addValueChangeListener(event -> notificationMenus.forEach(n -> n.setMarkAllAsReadButtonVisible(event.getValue())));
 
         add(actionsLayout, secondActionLayout);
     }
