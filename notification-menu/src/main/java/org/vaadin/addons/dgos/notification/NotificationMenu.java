@@ -49,6 +49,68 @@ public class NotificationMenu extends LitTemplate {
         getElement().setProperty("title", title);
     }
 
+    /**
+     * Sets the maximal item count. When the item count is above that maximum, the count will be repelaced
+     * with the maxItemCountLabel. As soon as the item count is equal or below the maximum, it will show the
+     * real count again.
+     * <p></p>
+     * Must be a number higher then 0.
+     * @param maxItemCount maximal item count to show
+     */
+    public void setMaxItemCount(final int maxItemCount) {
+        setMaxItemCount(maxItemCount, false);
+    }
+
+    /**
+     * Sets the maximal item count. When the item count is above that maximum, the count will be repelaced
+     * with the maxItemCountLabel. As soon as the item count is equal or below the maximum, it will show the
+     * real count again.
+     * <p></p>
+     * The boolean parameter indicates, if the maximum item count label shall be updated automatically (true).
+     * In that case the label will be based on the given max item count plus some "above" indicator.
+     * <p></p>
+     * Must be a number higher then 0.
+     * @param maxItemCount maximal item count to show
+     * @param updateMaxItemCountLabel update the maximum item count label
+     */
+    public void setMaxItemCount(final int maxItemCount, boolean updateMaxItemCountLabel) {
+        if (maxItemCount < 1) {
+            throw new IllegalArgumentException("Max item count needs to be a number > 0");
+        }
+        getElement().setProperty("maxItemCount", maxItemCount);
+        if (updateMaxItemCountLabel) {
+            setMaxItemCountLabel(null);
+        }
+    }
+
+    /**
+     * Returns the maximal item count. By default 99.
+     * @return max item count
+     */
+    public int getMaxItemCount() {
+        return getElement().getProperty("maxItemCount", 99);
+    }
+
+    /**
+     * Sets a placeholder / label that shall be shown, when the maximal item count is reached (i. e. greater than).
+     * Setting null will reset it to its default ("+" plus the current max item count).
+     * <p></p>
+     * You may set any string you like, but please remember, that it will be shown inside the small counter circle
+     * and thus may exceed its boundaries.
+     * @param maxItemCountLabel max item count label
+     */
+    public void setMaxItemCountLabel(final String maxItemCountLabel) {
+        getElement().setProperty("maxItemCountLabel", maxItemCountLabel != null ? maxItemCountLabel : "+" + getMaxItemCount());
+    }
+
+    /**
+     * Returns the placeholder / label that shall be shown, when the maximal item count is reached (i. e. greater than).
+     * @return max item count label
+     */
+    public String getMaxItemCountLabel() {
+        return getElement().getProperty("maxItemCountLabel", "+" + getMaxItemCount());
+    }
+
     public void setWidth(final String width) {
         getElement().setProperty("width", width);
     }
