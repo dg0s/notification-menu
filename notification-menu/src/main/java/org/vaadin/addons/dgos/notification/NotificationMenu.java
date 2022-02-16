@@ -31,6 +31,9 @@ import java.util.Collection;
 public class NotificationMenu extends LitTemplate {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
+    public static final String DEFAULT_DATE_TIME_FORMAT_PATTERN = "YYYY/MM/DD HH:mm";
+    public static final String DEFAULT_LABEL_MARK_ALL_AS_READ = "Mark all as read";
+    public static final String DEFAULT_LABEL_VIEW_ALL = "View all";
 
     public NotificationMenu() {
         objectMapper.registerModule(new JavaTimeModule());
@@ -82,6 +85,61 @@ public class NotificationMenu extends LitTemplate {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * Sets the pattern used to format the date time of a notification item. By default "YYYY/MM/DD HH:mm".
+     * <p></p>
+     * Passing null will reset it to its default.
+     * @param pattern pattern
+     */
+    public void setDateTimeFormatPattern(String pattern) {
+        getElement().setProperty("dateTimeFormatPattern", pattern != null ? pattern : DEFAULT_DATE_TIME_FORMAT_PATTERN);
+    }
+
+    /**
+     * Returns the pattern used to format the date time of a notification item. By default "YYYY/MM/DD HH:mm".
+     * @return date time format pattern
+     */
+    public String getDateTimeFormatPattern() {
+        return getElement().getProperty("dateTimeFormatPattern", DEFAULT_DATE_TIME_FORMAT_PATTERN);
+    }
+
+    /**
+     * Sets the label to be used for the "View all" button in the popup. By default "View all".
+     * <p></p>
+     * Passing null will reset it to its default.
+     * @param labelViewAll view all label
+     */
+    public void setLabelViewAll(String labelViewAll) {
+        getElement().setProperty("labelViewAll", labelViewAll != null ? labelViewAll : DEFAULT_LABEL_VIEW_ALL);
+    }
+
+    /**
+     * Returns the label to be used for the "View all" button in the popup. By default "View all".
+     * @return view all label
+     */
+    public String getLabelViewAll() {
+        return getElement().getProperty("labelViewAll", DEFAULT_LABEL_VIEW_ALL);
+    }
+
+    /**
+     * Sets the label to be used for the "Mark all as read" button in the popup. By default "Mark all as read".
+     * <p></p>
+     * Passing null will reset it to its default.
+     * @param labelMarkAllAsRead mark al as read label
+     */
+    public void setLabelMarkAllAsRead(String labelMarkAllAsRead) {
+        getElement().setProperty("labelMarkAllAsRead", labelMarkAllAsRead != null ? labelMarkAllAsRead : DEFAULT_LABEL_MARK_ALL_AS_READ);
+    }
+
+    /**
+     * Returns the label to be used for the "Mark as read" button in the popup. By default "Mark as read".
+     * @return mark all as read label
+     */
+    public String getLabelMarkAllAsRead() {
+        return getElement().getProperty("labelMarkAllAsRead", DEFAULT_LABEL_MARK_ALL_AS_READ);
+    }
+
 
     public Registration addItemClickEventListener(ComponentEventListener<NotificationItemClickEvent> listener) {
         return addListener(NotificationItemClickEvent.class, listener);

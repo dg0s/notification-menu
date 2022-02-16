@@ -17,6 +17,9 @@ export class NotificationMenu extends LitElement {
     @property({type: String}) height = "270px";
     @property({type: String}) orientation = 'left';
     @property({type: String}) title = 'Notifications';
+    @property({type: String}) labelMarkAllAsRead = 'Mark all as read';
+    @property({type: String}) labelViewAll = 'View all';
+    @property({type: String}) dateTimeFormatPattern = 'YYYY/MM/DD HH:mm';
     @property({type: Boolean}) ringBell = false;
     @property({type: Boolean}) closeOnClick = true;
     @property({type: Number}) _unread = 0;
@@ -182,7 +185,7 @@ export class NotificationMenu extends LitElement {
                                              @click="${() => this._onItemClicked(item)}">
                                     <div class="menu-item-header">
                                         <span class="title" title="${item.title}"><strong>${item.title}</strong></span>
-                                        <span class="datetime">${moment(item.datetime).format('YYYY/MM/DD HH:mm')}</span>
+                                        <span class="datetime">${moment(item.datetime).format(this.dateTimeFormatPattern)}</span>
                                     </div>
                                     <div class="description">${item.description}</div>
                                 </vaadin-item>
@@ -190,8 +193,8 @@ export class NotificationMenu extends LitElement {
                         </div>
                     </paper-dialog-scrollable>
                     <div class="menu-item-footer">
-                        <h4 id="view-all" class="menu-header"><span @click="${this._onViewAll}">View all</span></h4>
-                        <h4 class="menu-header"><span @click="${this._onMarkAllAsRead}">Mark all as read</span></h4>
+                        <h4 id="view-all" class="menu-header"><span @click="${this._onViewAll}">${this.labelViewAll}</span></h4>
+                        <h4 class="menu-header"><span @click="${this._onMarkAllAsRead}">${this.labelMarkAllAsRead}</span></h4>
                     </div>
                 </paper-dialog>
             </div>
