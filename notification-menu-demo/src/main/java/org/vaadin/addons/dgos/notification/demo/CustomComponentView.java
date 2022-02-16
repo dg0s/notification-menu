@@ -1,12 +1,16 @@
 package org.vaadin.addons.dgos.notification.demo;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.contextmenu.MenuItem;
+import com.vaadin.flow.component.contextmenu.SubMenu;
+import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.menubar.MenuBar;
+import com.vaadin.flow.component.menubar.MenuBarVariant;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.theme.Theme;
-import com.vaadin.flow.theme.lumo.Lumo;
 import org.vaadin.addons.dgos.notification.NotificationItem;
 import org.vaadin.addons.dgos.notification.NotificationMenu;
 import org.vaadin.addons.dgos.notification.NotificationType;
@@ -61,12 +65,29 @@ public class CustomComponentView extends VerticalLayout {
         right.addClickListener(event -> {
             notificationMenu.setOrientation(Orientation.RIGHT);
         });
-        final Button add = new Button("Add Noticiation");
-        add.addClickListener(event -> {
-            items.add(new NotificationItem(NotificationType.SUCCESS, "Movie Release", "Money Heist has been released today!"));
-            notificationMenu.setItems(items);
-        });
 
-        actionsLayout.add(left, right, add);
+        MenuBar addNotification = new MenuBar();
+        addNotification.addThemeVariants(MenuBarVariant.LUMO_ICON);
+        addNotification.addItem("Add Notification", event -> addNotification(notificationMenu, NotificationType.INFO));
+        MenuItem menuItem = addNotification.addItem(VaadinIcon.CHEVRON_DOWN.create());
+        SubMenu subMenu = menuItem.getSubMenu();
+        addSubMenuItem(subMenu, notificationMenu, NotificationType.INFO);
+        addSubMenuItem(subMenu, notificationMenu, NotificationType.SUCCESS);
+        addSubMenuItem(subMenu, notificationMenu, NotificationType.WARNING);
+        addSubMenuItem(subMenu, notificationMenu, NotificationType.DANGER);
+        addSubMenuItem(subMenu, notificationMenu, NotificationType.UNKNOWN);
+
+        Button clearAll = new Button("Clear all", event -> notificationMenu.setItems());
+
+        actionsLayout.add(left, right, addNotification,clearAll);
+    }
+
+    private MenuItem addSubMenuItem(SubMenu subMenu, NotificationMenu notificationMenu, NotificationType type) {
+        return subMenu.addItem("Add \"" + type.name().toLowerCase() + "\"", event -> addNotification(notificationMenu, type));
+    }
+
+    private void addNotification(NotificationMenu notificationMenu, NotificationType type) {
+        items.add(new NotificationItem(type, "Movie Release", "Money Heist has been released today!"));
+        notificationMenu.setItems(items);
     }
 }
