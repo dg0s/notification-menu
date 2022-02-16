@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Route(value = "")
-@Theme(value = Lumo.class)
 public class CustomComponentView extends VerticalLayout {
 
     static final List<NotificationItem> items = new ArrayList<NotificationItem>() {{
