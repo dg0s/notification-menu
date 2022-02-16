@@ -48,8 +48,12 @@ public class CustomComponentView extends VerticalLayout {
         NotificationMenu customIcon = createSample("Custom icon");
 //        customIcon.setIcon(VaadinIcon.MAILBOX);
 
+        // i18n German
         NotificationMenu i18n = createSample("i18n");
-        // TBD
+        //        i18n.setTitle("Benachrichtigungen");
+        //        i18n.setDateTimeFormatPattern("dd.MM.yyyy, HH:mm");
+        //        i18n.setLabelViewAll("Alle öffnen");
+        //        i18n.setLabelMarkAllAsRead("Alle als gelesen markieren");
     }
 
     private void createToolbar() {
