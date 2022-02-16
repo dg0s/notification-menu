@@ -97,6 +97,8 @@ public class CustomComponentView extends VerticalLayout {
         Checkbox viewAllVisible = new Checkbox("View all visible", true);
         Checkbox markAllVisible = new Checkbox("Mark all visible", true);
         HorizontalLayout secondActionLayout = new HorizontalLayout(viewAllVisible, markAllVisible);
+        secondActionLayout.setWidthFull();
+        secondActionLayout.setJustifyContentMode(JustifyContentMode.CENTER);
 
         viewAllVisible.addValueChangeListener(event -> notificationMenus.forEach(n -> n.setViewAllButtonVisible(event.getValue())));
         markAllVisible.addValueChangeListener(event -> notificationMenus.forEach(n -> n.setMarkAllAsReadButtonVisible(event.getValue())));
