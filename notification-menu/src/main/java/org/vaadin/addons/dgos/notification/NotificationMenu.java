@@ -8,7 +8,9 @@ import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.littemplate.LitTemplate;
+import com.vaadin.flow.component.template.Id;
 import com.vaadin.flow.shared.Registration;
 import elemental.json.Json;
 import elemental.json.JsonObject;
@@ -36,6 +38,12 @@ public class NotificationMenu extends LitTemplate {
     public static final String DEFAULT_DATE_TIME_FORMAT_PATTERN = "YYYY/MM/DD HH:mm";
     public static final String DEFAULT_LABEL_MARK_ALL_AS_READ = "Mark all as read";
     public static final String DEFAULT_LABEL_VIEW_ALL = "View all";
+
+    @Id("view-all")
+    private H4 viewAllButton;
+
+    @Id("mark-all-as-read")
+    private H4 markAllAsReadButton;
 
     public NotificationMenu() {
         objectMapper.registerModule(new JavaTimeModule());
@@ -250,6 +258,38 @@ public class NotificationMenu extends LitTemplate {
 
     public Registration addMarkAllAsReadClickEventListener(ComponentEventListener<NotificationMarkAllAsReadClickEvent> listener) {
         return addListener(NotificationMarkAllAsReadClickEvent.class, listener);
+    }
+
+    /**
+     * This method will trigger the client side as if the user would have clicked the "mark all
+     * as read" button including a client side based event.
+     */
+    public void markAllAsRead() {
+        getElement().callJsFunction("_onMarkAllAsRead");
+    }
+
+
+    /**
+     * This method will trigger the client side as if the user would have clicked the
+     * "view all" button including a client side based event.
+     */
+    public void viewAll() {
+        getElement().callJsFunction("_onViewAll");
+    }
+
+    /**
+     * Clears the list without firing any event nor closing the dialog.
+     */
+    public void clearAll() {
+        setItems();
+    }
+
+    public void setViewAllButtonVisible(boolean visible) {
+        viewAllButton.setVisible(visible);
+    }
+
+    public void setMarkAllAsReadButtonVisible(boolean visible) {
+        markAllAsReadButton.setVisible(visible);
     }
 
     @DomEvent("view-all-clicked")
