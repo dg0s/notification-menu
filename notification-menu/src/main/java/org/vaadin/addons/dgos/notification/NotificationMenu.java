@@ -7,6 +7,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.NpmPackage;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.littemplate.LitTemplate;
 import com.vaadin.flow.shared.Registration;
 import elemental.json.Json;
@@ -16,6 +17,7 @@ import elemental.json.JsonValue;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Locale;
 
 /**
  * A Designer generated component for the notification-button template.
@@ -81,6 +83,41 @@ public class NotificationMenu extends LitTemplate {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Sets a new icon. The icon name must consists of the icon family (e.g. "vaadin") and the icon
+     * name (e.g. "bell"), separated by a colon, e.g. "vaadin:bell".
+     * @param icon icon
+     */
+    public void setIcon(String icon) {
+        getElement().setProperty("icon", icon);
+    }
+
+    /**
+     * Returns the currently set icon. By default "vaadin:bell".
+     * @return icon
+     */
+    public String getIcon() {
+        return getElement().getProperty("icon", "vaadin:bell");
+    }
+
+    /**
+     * Sets a new icon based on the given collection and name, for instance "vaadin" and "bell".
+     * @param collection collection
+     * @param name name
+     */
+    public void setIcon(String collection, String name) {
+        setIcon(collection + ":" + name);
+    }
+
+    /**
+     * Sets a new icon based on the given {@link VaadinIcon}.
+     * @param icon icon
+     */
+    public void setIcon(VaadinIcon icon) {
+        // @see Icon.java
+        setIcon("vaadin", icon.name().toLowerCase(Locale.ENGLISH).replace('_', '-'));
     }
 
     public Registration addItemClickEventListener(ComponentEventListener<NotificationItemClickEvent> listener) {
