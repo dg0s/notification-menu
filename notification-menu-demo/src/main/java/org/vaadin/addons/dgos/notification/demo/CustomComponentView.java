@@ -1,6 +1,7 @@
 package org.vaadin.addons.dgos.notification.demo;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.contextmenu.SubMenu;
 import com.vaadin.flow.component.html.H5;
@@ -83,8 +84,24 @@ public class CustomComponentView extends VerticalLayout {
 
         Button clearAll = new Button("Clear all", event -> notificationMenus.forEach(n -> n.setItems()));
 
-        actionsLayout.add(left, right, addNotification,clearAll);
-        add(actionsLayout);
+        actionsLayout.add(left, right, addNotification/*, new Button("Clear", event -> {
+            items.clear();
+            notificationMenus.forEach(n -> n.clearAll());
+        }), new Button("Mark all as read", event -> {
+            notificationMenus.forEach(n -> n.markAllAsRead());
+        }), new Button("View all", event -> {
+            notificationMenus.forEach(n -> n.viewAll());
+        })*/);
+
+
+        Checkbox viewAllVisible = new Checkbox("View all visible", true);
+        Checkbox markAllVisible = new Checkbox("Mark all visible", true);
+        HorizontalLayout secondActionLayout = new HorizontalLayout(viewAllVisible, markAllVisible);
+
+//        viewAllVisible.addValueChangeListener(event -> notificationMenus.forEach(n -> n.setViewAllButtonVisible(event.getValue())));
+//        markAllVisible.addValueChangeListener(event -> notificationMenus.forEach(n -> n.setMarkAllButtonVisible(event.getValue())));
+
+        add(actionsLayout, secondActionLayout);
     }
 
     private NotificationMenu createSample(String sampleName) {
