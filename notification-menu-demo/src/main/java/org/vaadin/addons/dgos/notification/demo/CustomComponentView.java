@@ -4,7 +4,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.contextmenu.SubMenu;
-import com.vaadin.flow.component.html.H5;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Route(value = "")
+@CssImport("./custom-colors.css")
 public class CustomComponentView extends VerticalLayout {
 
     static final List<NotificationItem> items = new ArrayList<NotificationItem>() {{
@@ -51,10 +52,13 @@ public class CustomComponentView extends VerticalLayout {
 
         // i18n German
         NotificationMenu i18n = createSample("i18n");
-                i18n.setTitle("Benachrichtigungen");
-                i18n.setDateTimeFormatPattern("dd.MM.yyyy, HH:mm");
-                i18n.setLabelViewAll("Alle öffnen");
-                i18n.setLabelMarkAllAsRead("Alle als gelesen markieren");
+        i18n.setTitle("Benachrichtigungen");
+        i18n.setDateTimeFormatPattern("dd.MM.yyyy, HH:mm");
+        i18n.setLabelViewAll("Alle öffnen");
+        i18n.setLabelMarkAllAsRead("Alle als gelesen markieren");
+
+        NotificationMenu customColors = createSample("Custom colors");
+        customColors.addClassName("custom-colors");
     }
 
     private void createToolbar() {

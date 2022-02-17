@@ -38,6 +38,18 @@ export class NotificationMenu extends LitElement {
 
     static get styles() {
         return [css`
+        
+            :host {
+                --notification-menu-type-unknown: var(--lumo-shade-70pct);
+                --notification-menu-type-info: var(--lumo-primary-color);
+                --notification-menu-type-success: var(--lumo-success-color);
+                --notification-menu-type-warning: #f0ad4e;
+                --notification-menu-type-danger: var(--lumo-error-color);
+                --notification-menu-badge-background-color: var(--lumo-error-color);
+                --notification-menu-badge-color: white;
+            }
+        
+        
           .dialog{
             margin: 0px 25px;
             min-width: 250px;
@@ -118,11 +130,11 @@ export class NotificationMenu extends LitElement {
           .menu-item-footer .menu-header:first-child{flex: 1 0 auto;padding: 0;}
           .menu-item-footer .menu-header:nth-child(2){text-align: end;padding: 0;}
           
-          .unknown{border-left-color: var(--lumo-shade-70pct);}
-          .info{border-left-color: var(--lumo-primary-color);}
-          .success{border-left-color: var(--lumo-success-color);}
+          .unknown{border-left-color: var(--notification-menu-type-unknown, --lumo-shade-70pct);}
+          .info{border-left-color: var(--notification-menu-type-info, --lumo-primary-color);}
+          .success{border-left-color: var(--notification-menu-type-success, --lumo-success-color);}
           .warning{border-left-color: var(--notification-menu-type-warning, #f0ad4e);}
-          .danger{border-left-color: var(--lumo-error-color);}
+          .danger{border-left-color: var(--notification-menu-type-danger, --lumo-error-color);}
           [hidden]{visibility:hidden;}
           
           .badge {
@@ -132,8 +144,8 @@ export class NotificationMenu extends LitElement {
             top: 0;
             right: -3px;
             border-radius: 20px;
-            background: var(--lumo-error-color);
-            color: white;
+            background: var(--notification-menu-badge-background-color, --lumo-error-color);
+            color: var(--notification-menu-badge-color, white);
             cursor: pointer;
             font-size: 10px;
             padding: 0px;
