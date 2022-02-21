@@ -47,8 +47,8 @@ export class NotificationMenu extends LitElement {
                 --notification-menu-type-danger: var(--lumo-error-color);
                 --notification-menu-badge-background-color: var(--lumo-error-color);
                 --notification-menu-badge-color: white;
+                --notification-menu-unread-background-color: var(--lumo-shade-5pct);
             }
-        
         
           .dialog{
             margin: 0px 25px;
@@ -83,7 +83,7 @@ export class NotificationMenu extends LitElement {
             background-color: var(--lumo-shade-10pct) !important;
           }
           .menu-item[data-read="false"] {
-            background-color: var(--lumo-shade-5pct);
+            background-color: var(--notification-menu-unread-background-color);
           }
           .menu-item-header{
             display: flex;
