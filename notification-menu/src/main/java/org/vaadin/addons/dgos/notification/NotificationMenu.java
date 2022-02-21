@@ -162,6 +162,32 @@ public class NotificationMenu extends LitTemplate {
     }
 
     /**
+     * Adds the given items to this instance. Items are internally mapped by their keys
+     * ({@link NotificationItem#getKey()}). Items already known to the client will be ignored.
+     *
+     * @param itemsToAdd items to add
+     */
+    public void addItems(NotificationItem... itemsToAdd) {
+        this.addItems(Arrays.asList(itemsToAdd));
+    }
+
+    /**
+     * Adds the given items to this instance. Items are internally mapped by their keys
+     * ({@link NotificationItem#getKey()}). Items already known to the client will be ignored.
+     *
+     * @param itemsToAdd items to add
+     */
+    public void addItems(Collection<NotificationItem> itemsToAdd) {
+        try {
+            final String data = objectMapper.writeValueAsString(itemsToAdd);
+            final JsonValue value = Json.instance().parse(data);
+            getElement().callJsFunction("addItems", value);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * Resend the given items to the client to update them. Items are mapped by their keys
      * ({@link NotificationItem#getKey()}).
      * <p></p>
@@ -186,6 +212,32 @@ public class NotificationMenu extends LitTemplate {
             final String data = objectMapper.writeValueAsString(itemsToUpdate);
             final JsonValue value = Json.instance().parse(data);
             getElement().callJsFunction("updateItems", value);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Removes the given items from this instance. Items are internally mapped by their keys
+     * ({@link NotificationItem#getKey()}). Items unknown to the client will be ignored.
+     *
+     * @param itemsToRemove items to remove
+     */
+    public void removeItems(NotificationItem... itemsToRemove) {
+        this.removeItems(Arrays.asList(itemsToRemove));
+    }
+
+    /**
+     * Removes the given items from this instance. Items are internally mapped by their keys
+     * ({@link NotificationItem#getKey()}). Items unknown to the client will be ignored.
+     *
+     * @param itemsToRemove items to remove
+     */
+    public void removeItems(Collection<NotificationItem> itemsToRemove) {
+        try {
+            final String data = objectMapper.writeValueAsString(itemsToRemove);
+            final JsonValue value = Json.instance().parse(data);
+            getElement().callJsFunction("removeItems", value);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

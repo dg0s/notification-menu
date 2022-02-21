@@ -222,19 +222,18 @@ export class NotificationMenu extends LitElement {
         this._calculateUnread(this.notifications);
     }
 
+    addItems(items: NotificationItem | NotificationItem[]) {
+        items = NotificationMenu.asArray(items);
+        let map = NotificationMenu.asMap(this.notifications);
+
+        // add only items that are not yet known to this instance.
+        this.notifications.push(...(items.filter(item => !map.has(item.key))));
+
+        this.requestUpdate("notifications");
+    }
+
     updateItems(items: NotificationItem | NotificationItem[]) {
-        if (!Array.isArray(items)) {
-            items = [items];
-        }
-
-        if (!this.notifications) {
-            console.error("Cannot update items as there are none.");
-        }
-
-        let map = new Map<string, NotificationItem>();
-        for (let item of items) {
-            map.set(item.key, item);
-        }
+        let map = NotificationMenu.asMap(items);
 
         for (let i = 0; i < this.notifications.length; i++) {
             let key = this.notifications[i].key;
@@ -245,6 +244,32 @@ export class NotificationMenu extends LitElement {
         }
 
         this.requestUpdate("notifications");
+    }
+
+    removeItems(items: NotificationItem | NotificationItem[]) {
+        let map = NotificationMenu.asMap(items);
+
+        this.notifications = this.notifications.filter(item => !map.has(item.key));
+
+        this.requestUpdate("notifications");
+    }
+
+    private static asArray(items: NotificationItem | NotificationItem[]) {
+        if (!Array.isArray(items)) {
+            items = [items];
+        }
+        return items;
+    }
+
+    private static asMap(items: NotificationItem | NotificationItem[]) {
+        items = NotificationMenu.asArray(items);
+
+        let map = new Map<string, NotificationItem>();
+        for (let item of items) {
+            map.set(item.key, item);
+        }
+
+        return map;
     }
 
     open() {
