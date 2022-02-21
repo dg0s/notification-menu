@@ -221,6 +221,31 @@ export class NotificationMenu extends LitElement {
         this._calculateUnread(this.notifications);
     }
 
+    updateItems(items: NotificationItem | NotificationItem[]) {
+        if (!Array.isArray(items)) {
+            items = [items];
+        }
+
+        if (!this.notifications) {
+            console.error("Cannot update items as there are none.");
+        }
+
+        let map = new Map<string, NotificationItem>();
+        for (let item of items) {
+            map.set(item.key, item);
+        }
+
+        for (let i = 0; i < this.notifications.length; i++) {
+            let key = this.notifications[i].key;
+            let updatedItem = map.get(key);
+            if (updatedItem) {
+                this.notifications[i] = updatedItem;
+            }
+        }
+
+        this.requestUpdate("notifications");
+    }
+
     open() {
         if (this._dialog != null && !this._dialog.opened) {
             this._dialog.open();
@@ -275,11 +300,11 @@ export class NotificationMenu extends LitElement {
     }
 }
 
-export class NotificationItem {
-    key?: String;
-    type?: String;
-    title?: String;
-    description?: String;
+export interface NotificationItem {
+    key: string;
+    type?: string;
+    title?: string;
+    description?: string;
     datetime?: Date;
     read?: Boolean;
 }

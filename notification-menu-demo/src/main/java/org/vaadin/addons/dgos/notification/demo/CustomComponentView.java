@@ -118,9 +118,7 @@ public class CustomComponentView extends VerticalLayout {
         notificationMenu.addItemClickEventListener(event -> {
             final NotificationItem selectedItem = event.getSelectedItem();
             Notification.show(selectedItem.getDescription(), 5000, Notification.Position.TOP_END).open();
-            final int index = items.indexOf(selectedItem);
-            items.get(index).markAsRead();
-            notificationMenu.setItems(items);
+            notificationMenu.markAsRead(selectedItem);
         });
         notificationMenu.addViewAllClickEventListener(event -> {
             Notification.show("Option 'View all' clicked!", 5000, Notification.Position.TOP_END).open();

@@ -159,9 +159,40 @@ public class NotificationMenu extends LitTemplate {
     }
 
     /**
+     * Resend the given items to the client to update them. Items are mapped by their keys
+     * ({@link NotificationItem#getKey()}).
+     * <p></p>
+     * Use this method if only a subset of items has changed.
+     *
+     * @param itemsToUpdate items to update
+     */
+    public void updateItems(NotificationItem... itemsToUpdate) {
+        this.updateItems(Arrays.asList(itemsToUpdate));
+    }
+
+    /**
+     * Resend the given items to the client to update them. Items are mapped by their keys
+     * ({@link NotificationItem#getKey()}).
+     * <p></p>
+     * Use this method if only a subset of items has changed.
+     *
+     * @param itemsToUpdate items to update
+     */
+    public void updateItems(Collection<NotificationItem> itemsToUpdate) {
+        try {
+            final String data = objectMapper.writeValueAsString(itemsToUpdate);
+            final JsonValue value = Json.instance().parse(data);
+            getElement().callJsFunction("updateItems", value);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * Sets the pattern used to format the date time of a notification item. By default "YYYY/MM/DD HH:mm".
      * <p></p>
      * Passing null will reset it to its default.
+     *
      * @param pattern pattern
      */
     public void setDateTimeFormatPattern(String pattern) {
@@ -266,6 +297,23 @@ public class NotificationMenu extends LitTemplate {
      */
     public void markAllAsRead() {
         getElement().callJsFunction("_onMarkAllAsRead");
+    }
+
+    /**
+     * Marks the given items as "read" and informs the client.
+     * @param itemsToMarkAsRead items to be marked as read
+     */
+    public void markAsRead(NotificationItem... itemsToMarkAsRead) {
+        this.markAsRead(Arrays.asList(itemsToMarkAsRead));
+    }
+
+    /**
+     * Marks the given items as "read" and informs the client.
+     * @param itemsToMarkAsRead items to be marked as read
+     */
+    public void markAsRead(Collection<NotificationItem> itemsToMarkAsRead) {
+        itemsToMarkAsRead.forEach(NotificationItem::markAsRead);
+        updateItems(itemsToMarkAsRead);
     }
 
 
