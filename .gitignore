@@ -27,3 +27,7 @@ webpack.config.js
 .npmrc
 /notification-menu/frontend/generated/vaadin.ts
 /notification-menu/frontend/generated/index.ts
+/notification-menu/frontend/generated/index.js
+/notification-menu/frontend/generated/index.js.map
+/notification-menu/frontend/generated/vaadin.js
+/notification-menu/frontend/generated/vaadin.js.map
