@@ -123,10 +123,10 @@ public class CustomComponentView extends VerticalLayout {
         notificationMenu.addViewAllClickEventListener(event -> {
             Notification.show("Option 'View all' clicked!", 5000, Notification.Position.TOP_END).open();
         });
+
+        notificationMenu.setAutoMarkAllAsRead(true);
         notificationMenu.addMarkAllAsReadClickEventListener(event -> {
             Notification.show("Option 'Mark all as read' clicked!", 5000, Notification.Position.TOP_END).open();
-            items.forEach(NotificationItem::markAsRead);
-            notificationMenu.setItems(items);
         });
         notificationMenu.setItems(items);
         Span span = new Span(sampleName);

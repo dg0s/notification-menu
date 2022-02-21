@@ -23,9 +23,12 @@ import java.util.Locale;
 
 /**
  * A Designer generated component for the notification-button template.
- * <p>
+ * <p></p>
  * Designer will add and remove fields with @Id mappings but
  * does not overwrite or otherwise change this file.
+ * <p></p>
+ * Items added to this menu are not cached inside, but seen as volatile. Events will recreate new instances
+ * as needed. If you want to cache those items, you have to do that outside of this instance.
  */
 @NpmPackage(value = "moment", version = "^2.29.1")
 @NpmPackage(value = "@polymer/paper-dialog", version = "^3.0.1")
@@ -292,11 +295,29 @@ public class NotificationMenu extends LitTemplate {
     }
 
     /**
-     * This method will trigger the client side as if the user would have clicked the "mark all
-     * as read" button including a client side based event.
+     * Sets, if clicking on mark all as read shall automatically mark the client side items as read (true) or
+     * keep them as they are (false). In both cases the {@link NotificationMarkAllAsReadClickEvent}
+     * event is fired.
+     * <p></p>
+     * By default clicking "mark all as read" only fires an event to the server. In that case the server
+     * has to take care of mark all the items as read (e.g. by calling {@link #markAllAsRead() or handling
+     * the items}.
+     *
+     * @see #markAllAsRead()
+     * @see NotificationMarkAllAsReadClickEvent
+     *
+     * @param autoMarkAllAsRead automatically mark all items as read
+     */
+    public void setAutoMarkAllAsRead(boolean autoMarkAllAsRead) {
+        getElement().setProperty("autoMarkAllAsRead", autoMarkAllAsRead);
+    }
+
+    /**
+     * This method will manually mark all known items on the client as read. Will not fire an extra event. Does
+     * not modify the server side elements.
      */
     public void markAllAsRead() {
-        getElement().callJsFunction("_onMarkAllAsRead");
+        getElement().callJsFunction("markAllAsRead");
     }
 
     /**

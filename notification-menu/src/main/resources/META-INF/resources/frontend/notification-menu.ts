@@ -23,6 +23,7 @@ export class NotificationMenu extends LitElement {
     @property({type: String}) icon = 'vaadin:bell';
     @property({type: Boolean}) ringBell = false;
     @property({type: Boolean}) closeOnClick = true;
+    @property({type: Boolean}) autoMarkAllAsRead = true;
     @property({type: Number}) _unread = 0;
     @property({type: Number}) maxItemCount = 99;
     @property({type: String}) maxItemCountLabel = "+99";
@@ -262,6 +263,14 @@ export class NotificationMenu extends LitElement {
         this.open();
     }
 
+    /**
+     * Marks all items as read. Does not trigger any event.
+     */
+    markAllAsRead() {
+        this.notifications.forEach(item => item.read = true);
+        this.requestUpdate("notifications");
+    }
+
     _onItemClicked(item: NotificationItem) {
         if (this.closeOnClick) {
             this.close();
@@ -277,6 +286,9 @@ export class NotificationMenu extends LitElement {
     }
 
     _onMarkAllAsRead() {
+        if (this.autoMarkAllAsRead) {
+            this.markAllAsRead();
+        }
         this.close();
         this.dispatchEvent(new CustomEvent('mark-all-clicked'));
     }
