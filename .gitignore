@@ -25,3 +25,5 @@ tsconfig.json
 types.d.ts
 webpack.config.js
 .npmrc
+/notification-menu/frontend/generated/vaadin.ts
+/notification-menu/frontend/generated/index.ts
