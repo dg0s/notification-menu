@@ -1,9 +1,8 @@
-import {css, customElement, html, LitElement, property, PropertyValues, state} from 'lit-element';
+import {css, customElement, html, LitElement, property, PropertyValues, state, query} from 'lit-element';
 import '@polymer/paper-dialog/paper-dialog.js';
 import '@vaadin/vaadin-button/vaadin-button.js';
 import '@vaadin/vaadin-item/vaadin-item.js';
 import '@polymer/iron-icon/iron-icon.js';
-import {query} from 'lit-element/lib/decorators.js';
 import {PaperDialogElement} from "@polymer/paper-dialog";
 import '@vaadin/vaadin-lumo-styles/style.js';
 import '@vaadin/vaadin-lumo-styles/sizing.js';
@@ -18,9 +17,16 @@ export class NotificationMenu extends LitElement {
     @property({type: String}) height = "270px";
     @property({type: String}) orientation = 'left';
     @property({type: String}) title = 'Notifications';
+    @property({type: String}) labelMarkAllAsRead = 'Mark all as read';
+    @property({type: String}) labelViewAll = 'View all';
+    @property({type: String}) dateTimeFormatPattern = 'YYYY/MM/DD HH:mm';
+    @property({type: String}) icon = 'vaadin:bell';
     @property({type: Boolean}) ringBell = false;
     @property({type: Boolean}) closeOnClick = true;
+    @property({type: Boolean}) autoMarkAllAsRead = true;
     @property({type: Number}) _unread = 0;
+    @property({type: Number}) maxItemCount = 99;
+    @property({type: String}) maxItemCountLabel = "+99";
 
     @state()
     private notifications: NotificationItem[] = [];
@@ -33,6 +39,18 @@ export class NotificationMenu extends LitElement {
 
     static get styles() {
         return [css`
+        
+            :host {
+                --notification-menu-type-unknown: var(--lumo-shade-70pct);
+                --notification-menu-type-info: var(--lumo-primary-color);
+                --notification-menu-type-success: var(--lumo-success-color);
+                --notification-menu-type-warning: #f0ad4e;
+                --notification-menu-type-danger: var(--lumo-error-color);
+                --notification-menu-badge-background-color: var(--lumo-error-color);
+                --notification-menu-badge-color: white;
+                --notification-menu-unread-background-color: var(--lumo-shade-5pct);
+            }
+        
           .dialog{
             margin: 0px 25px;
             min-width: 250px;
@@ -66,7 +84,7 @@ export class NotificationMenu extends LitElement {
             background-color: var(--lumo-shade-10pct) !important;
           }
           .menu-item[data-read="false"] {
-            background-color: var(--lumo-shade-5pct);
+            background-color: var(--notification-menu-unread-background-color);
           }
           .menu-item-header{
             display: flex;
@@ -113,11 +131,11 @@ export class NotificationMenu extends LitElement {
           .menu-item-footer .menu-header:first-child{flex: 1 0 auto;padding: 0;}
           .menu-item-footer .menu-header:nth-child(2){text-align: end;padding: 0;}
           
-          .unknown{border-left-color: var(--lumo-shade-70pct);}
-          .info{border-left-color: var(--lumo-primary-color);}
-          .success{border-left-color: var(--lumo-success-color);}
-          .warning{border-left-color: #f0ad4e;}
-          .danger{border-left-color: var(--lumo-error-color);}
+          .unknown{border-left-color: var(--notification-menu-type-unknown, --lumo-shade-70pct);}
+          .info{border-left-color: var(--notification-menu-type-info, --lumo-primary-color);}
+          .success{border-left-color: var(--notification-menu-type-success, --lumo-success-color);}
+          .warning{border-left-color: var(--notification-menu-type-warning, #f0ad4e);}
+          .danger{border-left-color: var(--notification-menu-type-danger, --lumo-error-color);}
           [hidden]{visibility:hidden;}
           
           .badge {
@@ -127,8 +145,8 @@ export class NotificationMenu extends LitElement {
             top: 0;
             right: -3px;
             border-radius: 20px;
-            background: var(--lumo-error-color);
-            color: white;
+            background: var(--notification-menu-badge-background-color, --lumo-error-color);
+            color: var(--notification-menu-badge-color, white);
             cursor: pointer;
             font-size: 10px;
             padding: 0px;
@@ -169,9 +187,9 @@ export class NotificationMenu extends LitElement {
         return html`
             <div>
                 <vaadin-button theme="icon tertiary" @click="${this._onButtonClick}">
-                    <iron-icon id="bell" class="bell" icon="vaadin:bell" slot="prefix"></iron-icon>
+                    <iron-icon id="bell" class="bell" icon="${this.icon}" slot="prefix"></iron-icon>
                     <span class="badge" slot="suffix"
-                          ?hidden="${this._unread < 1}">${this._unread > 99 ? '+99' : this._unread}</span>
+                          ?hidden="${this._unread < 1}">${this._unread > this.maxItemCount ? this.maxItemCountLabel : this._unread}</span>
                 </vaadin-button>
                 <paper-dialog id="dialog" class="dialog" no-overlap horizontal-align="${this.orientation}"
                               vertical-align="top">
@@ -183,7 +201,7 @@ export class NotificationMenu extends LitElement {
                                              @click="${() => this._onItemClicked(item)}">
                                     <div class="menu-item-header">
                                         <span class="title" title="${item.title}"><strong>${item.title}</strong></span>
-                                        <span class="datetime">${moment(item.datetime).format('YYYY/MM/DD HH:mm')}</span>
+                                        <span class="datetime">${moment(item.datetime).format(this.dateTimeFormatPattern)}</span>
                                     </div>
                                     <div class="description">${item.description}</div>
                                 </vaadin-item>
@@ -191,8 +209,8 @@ export class NotificationMenu extends LitElement {
                         </div>
                     </paper-dialog-scrollable>
                     <div class="menu-item-footer">
-                        <h4 id="view-all" class="menu-header"><span @click="${this._onViewAll}">View all</span></h4>
-                        <h4 class="menu-header"><span @click="${this._onMarkAllAsRead}">Mark all as read</span></h4>
+                        <h4 id="view-all" class="menu-header"><span @click="${this._onViewAll}">${this.labelViewAll}</span></h4>
+                        <h4 id="mark-all-as-read"class="menu-header"><span @click="${this._onMarkAllAsRead}">${this.labelMarkAllAsRead}</span></h4>
                     </div>
                 </paper-dialog>
             </div>
@@ -202,6 +220,56 @@ export class NotificationMenu extends LitElement {
     protected updated(_changedProperties: PropertyValues) {
         super.updated(_changedProperties);
         this._calculateUnread(this.notifications);
+    }
+
+    addItems(items: NotificationItem | NotificationItem[]) {
+        items = NotificationMenu.asArray(items);
+        let map = NotificationMenu.asMap(this.notifications);
+
+        // add only items that are not yet known to this instance.
+        this.notifications.push(...(items.filter(item => !map.has(item.key))));
+
+        this.requestUpdate("notifications");
+    }
+
+    updateItems(items: NotificationItem | NotificationItem[]) {
+        let map = NotificationMenu.asMap(items);
+
+        for (let i = 0; i < this.notifications.length; i++) {
+            let key = this.notifications[i].key;
+            let updatedItem = map.get(key);
+            if (updatedItem) {
+                this.notifications[i] = updatedItem;
+            }
+        }
+
+        this.requestUpdate("notifications");
+    }
+
+    removeItems(items: NotificationItem | NotificationItem[]) {
+        let map = NotificationMenu.asMap(items);
+
+        this.notifications = this.notifications.filter(item => !map.has(item.key));
+
+        this.requestUpdate("notifications");
+    }
+
+    private static asArray(items: NotificationItem | NotificationItem[]) {
+        if (!Array.isArray(items)) {
+            items = [items];
+        }
+        return items;
+    }
+
+    private static asMap(items: NotificationItem | NotificationItem[]) {
+        items = NotificationMenu.asArray(items);
+
+        let map = new Map<string, NotificationItem>();
+        for (let item of items) {
+            map.set(item.key, item);
+        }
+
+        return map;
     }
 
     open() {
@@ -220,6 +288,14 @@ export class NotificationMenu extends LitElement {
         this.open();
     }
 
+    /**
+     * Marks all items as read. Does not trigger any event.
+     */
+    markAllAsRead() {
+        this.notifications.forEach(item => item.read = true);
+        this.requestUpdate("notifications");
+    }
+
     _onItemClicked(item: NotificationItem) {
         if (this.closeOnClick) {
             this.close();
@@ -235,6 +311,9 @@ export class NotificationMenu extends LitElement {
     }
 
     _onMarkAllAsRead() {
+        if (this.autoMarkAllAsRead) {
+            this.markAllAsRead();
+        }
         this.close();
         this.dispatchEvent(new CustomEvent('mark-all-clicked'));
     }
@@ -258,11 +337,11 @@ export class NotificationMenu extends LitElement {
     }
 }
 
-export class NotificationItem {
-    key?: String;
-    type?: String;
-    title?: String;
-    description?: String;
+export interface NotificationItem {
+    key: string;
+    type?: string;
+    title?: string;
+    description?: string;
     datetime?: Date;
     read?: Boolean;
 }

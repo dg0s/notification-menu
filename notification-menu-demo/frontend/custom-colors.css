@@ -1,0 +1,9 @@
+.custom-colors {
+    --notification-menu-type-unknown: salmon;
+    --notification-menu-type-info: whitesmoke;
+    --notification-menu-type-success: yellow;
+    --notification-menu-type-warning: lightgreen;
+    --notification-menu-type-danger: skyblue;
+    --notification-menu-badge-background-color: lightblue;
+    --notification-menu-badge-color: black;
+}
