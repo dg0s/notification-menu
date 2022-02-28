@@ -7,8 +7,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.NpmPackage;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.html.H4;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.littemplate.LitTemplate;
 import com.vaadin.flow.component.template.Id;
 import com.vaadin.flow.shared.Registration;
@@ -53,28 +53,39 @@ public class NotificationMenu extends LitTemplate {
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
     }
 
+    /**
+     * Sets the orientation of this component.
+     * <p></p>
+     * By default, the value is {@link Orientation#LEFT}.
+     *
+     * @param orientation the initial orientation of the pop-up
+     */
     public void setOrientation(final Orientation orientation) {
         getElement().setProperty("orientation", orientation.getKey());
     }
 
+    /**
+     * Sets whether the dialog can be closed by click outside the component.
+     * <p></p>
+     * By default, the dialog is closable when click outside the component.
+     *
+     * @param closeOnClick {@code true} to enable closing the dialog on click outside,
+     *                     {@code false} to disable it
+     */
     public void setCloseOnClick(final boolean closeOnClick) {
         getElement().setProperty("closeOnClick", closeOnClick);
     }
 
+    /**
+     * Sets the title of this component.
+     * <p></p>
+     * The title is shown in the dialog. If the title is <code>null</code> the component header is hidden.
+     *
+     * @param title the title value to set, or <code>null</code> to remove any
+     *              previously set title
+     */
     public void setTitle(final String title) {
         getElement().setProperty("title", title);
-    }
-
-    /**
-     * Sets the maximal item count. When the item count is above that maximum, the count will be repelaced
-     * with the maxItemCountLabel. As soon as the item count is equal or below the maximum, it will show the
-     * real count again.
-     * <p></p>
-     * Must be a number higher then 0.
-     * @param maxItemCount maximal item count to show
-     */
-    public void setMaxItemCount(final int maxItemCount) {
-        setMaxItemCount(maxItemCount, false);
     }
 
     /**
@@ -86,7 +97,8 @@ public class NotificationMenu extends LitTemplate {
      * In that case the label will be based on the given max item count plus some "above" indicator.
      * <p></p>
      * Must be a number higher then 0.
-     * @param maxItemCount maximal item count to show
+     *
+     * @param maxItemCount            maximal item count to show
      * @param updateMaxItemCountLabel update the maximum item count label
      */
     public void setMaxItemCount(final int maxItemCount, boolean updateMaxItemCountLabel) {
@@ -101,10 +113,33 @@ public class NotificationMenu extends LitTemplate {
 
     /**
      * Returns the maximal item count. By default 99.
+     *
      * @return max item count
      */
     public int getMaxItemCount() {
         return getElement().getProperty("maxItemCount", 99);
+    }
+
+    /**
+     * Sets the maximal item count. When the item count is above that maximum, the count will be repelaced
+     * with the maxItemCountLabel. As soon as the item count is equal or below the maximum, it will show the
+     * real count again.
+     * <p></p>
+     * Must be a number higher then 0.
+     *
+     * @param maxItemCount maximal item count to show
+     */
+    public void setMaxItemCount(final int maxItemCount) {
+        setMaxItemCount(maxItemCount, false);
+    }
+
+    /**
+     * Returns the placeholder / label that shall be shown, when the maximal item count is reached (i. e. greater than).
+     *
+     * @return max item count label
+     */
+    public String getMaxItemCountLabel() {
+        return getElement().getProperty("maxItemCountLabel", "+" + getMaxItemCount());
     }
 
     /**
@@ -113,18 +148,11 @@ public class NotificationMenu extends LitTemplate {
      * <p></p>
      * You may set any string you like, but please remember, that it will be shown inside the small counter circle
      * and thus may exceed its boundaries.
+     *
      * @param maxItemCountLabel max item count label
      */
     public void setMaxItemCountLabel(final String maxItemCountLabel) {
         getElement().setProperty("maxItemCountLabel", maxItemCountLabel != null ? maxItemCountLabel : "+" + getMaxItemCount());
-    }
-
-    /**
-     * Returns the placeholder / label that shall be shown, when the maximal item count is reached (i. e. greater than).
-     * @return max item count label
-     */
-    public String getMaxItemCountLabel() {
-        return getElement().getProperty("maxItemCountLabel", "+" + getMaxItemCount());
     }
 
     public void setWidth(final String width) {
@@ -135,14 +163,27 @@ public class NotificationMenu extends LitTemplate {
         getElement().setProperty("height", height);
     }
 
+    /**
+     * Sets whether the icon supports shake animation.
+     * <p></p>
+     *
+     * @param ringBellOn {@code true} to enable shake animation on icon,
+     *                   {@code false} to disable it
+     */
     public void setRingBellOn(final boolean ringBellOn) {
         getElement().setProperty("ringBell", ringBellOn);
     }
 
+    /**
+     * Opens the dialog.
+     */
     public void open() {
         getElement().executeJs("open");
     }
 
+    /**
+     * Closes the dialog.
+     */
     public void close() {
         getElement().executeJs("close");
     }
@@ -244,6 +285,15 @@ public class NotificationMenu extends LitTemplate {
     }
 
     /**
+     * Returns the pattern used to format the date time of a notification item. By default "YYYY/MM/DD HH:mm".
+     *
+     * @return date time format pattern
+     */
+    public String getDateTimeFormatPattern() {
+        return getElement().getProperty("dateTimeFormatPattern", DEFAULT_DATE_TIME_FORMAT_PATTERN);
+    }
+
+    /**
      * Sets the pattern used to format the date time of a notification item. By default "YYYY/MM/DD HH:mm".
      * <p></p>
      * Passing null will reset it to its default.
@@ -255,25 +305,8 @@ public class NotificationMenu extends LitTemplate {
     }
 
     /**
-     * Returns the pattern used to format the date time of a notification item. By default "YYYY/MM/DD HH:mm".
-     * @return date time format pattern
-     */
-    public String getDateTimeFormatPattern() {
-        return getElement().getProperty("dateTimeFormatPattern", DEFAULT_DATE_TIME_FORMAT_PATTERN);
-    }
-
-    /**
-     * Sets the label to be used for the "View all" button in the popup. By default "View all".
-     * <p></p>
-     * Passing null will reset it to its default.
-     * @param labelViewAll view all label
-     */
-    public void setLabelViewAll(String labelViewAll) {
-        getElement().setProperty("labelViewAll", labelViewAll != null ? labelViewAll : DEFAULT_LABEL_VIEW_ALL);
-    }
-
-    /**
      * Returns the label to be used for the "View all" button in the popup. By default "View all".
+     *
      * @return view all label
      */
     public String getLabelViewAll() {
@@ -281,9 +314,30 @@ public class NotificationMenu extends LitTemplate {
     }
 
     /**
+     * Sets the label to be used for the "View all" button in the popup. By default "View all".
+     * <p></p>
+     * Passing null will reset it to its default.
+     *
+     * @param labelViewAll view all label
+     */
+    public void setLabelViewAll(String labelViewAll) {
+        getElement().setProperty("labelViewAll", labelViewAll != null ? labelViewAll : DEFAULT_LABEL_VIEW_ALL);
+    }
+
+    /**
+     * Returns the label to be used for the "Mark as read" button in the popup. By default "Mark as read".
+     *
+     * @return mark all as read label
+     */
+    public String getLabelMarkAllAsRead() {
+        return getElement().getProperty("labelMarkAllAsRead", DEFAULT_LABEL_MARK_ALL_AS_READ);
+    }
+
+    /**
      * Sets the label to be used for the "Mark all as read" button in the popup. By default "Mark all as read".
      * <p></p>
      * Passing null will reset it to its default.
+     *
      * @param labelMarkAllAsRead mark al as read label
      */
     public void setLabelMarkAllAsRead(String labelMarkAllAsRead) {
@@ -291,25 +345,8 @@ public class NotificationMenu extends LitTemplate {
     }
 
     /**
-     * Returns the label to be used for the "Mark as read" button in the popup. By default "Mark as read".
-     * @return mark all as read label
-     */
-    public String getLabelMarkAllAsRead() {
-        return getElement().getProperty("labelMarkAllAsRead", DEFAULT_LABEL_MARK_ALL_AS_READ);
-    }
-
-
-    /**
-     * Sets a new icon. The icon name must consists of the icon family (e.g. "vaadin") and the icon
-     * name (e.g. "bell"), separated by a colon, e.g. "vaadin:bell".
-     * @param icon icon
-     */
-    public void setIcon(String icon) {
-        getElement().setProperty("icon", icon);
-    }
-
-    /**
      * Returns the currently set icon. By default "vaadin:bell".
+     *
      * @return icon
      */
     public String getIcon() {
@@ -317,16 +354,18 @@ public class NotificationMenu extends LitTemplate {
     }
 
     /**
-     * Sets a new icon based on the given collection and name, for instance "vaadin" and "bell".
-     * @param collection collection
-     * @param name name
+     * Sets a new icon. The icon name must consists of the icon family (e.g. "vaadin") and the icon
+     * name (e.g. "bell"), separated by a colon, e.g. "vaadin:bell".
+     *
+     * @param icon icon
      */
-    public void setIcon(String collection, String name) {
-        setIcon(collection + ":" + name);
+    public void setIcon(String icon) {
+        getElement().setProperty("icon", icon);
     }
 
     /**
      * Sets a new icon based on the given {@link VaadinIcon}.
+     *
      * @param icon icon
      */
     public void setIcon(VaadinIcon icon) {
@@ -334,14 +373,44 @@ public class NotificationMenu extends LitTemplate {
         setIcon("vaadin", icon.name().toLowerCase(Locale.ENGLISH).replace('_', '-'));
     }
 
+    /**
+     * Sets a new icon based on the given collection and name, for instance "vaadin" and "bell".
+     *
+     * @param collection collection
+     * @param name       name
+     */
+    public void setIcon(String collection, String name) {
+        setIcon(collection + ":" + name);
+    }
+
+    /**
+     * Adds a click listener to an item of this component.
+     * <p></p>
+     *
+     * @param listener the listener to add, not <code>null</code>
+     * @return a handle that can be used for removing the listener
+     */
     public Registration addItemClickEventListener(ComponentEventListener<NotificationItemClickEvent> listener) {
         return addListener(NotificationItemClickEvent.class, listener);
     }
 
+    /**
+     * Adds a click listener to 'view all' action of this component.
+     * <p></p>
+     *
+     * @param listener listener the listener to add, not <code>null</code>
+     * @return a handle that can be used for removing the listener
+     */
     public Registration addViewAllClickEventListener(ComponentEventListener<NotificationViewAllClickEvent> listener) {
         return addListener(NotificationViewAllClickEvent.class, listener);
     }
 
+    /**
+     * Adds a click listener to 'mark all' action of this component.
+     *
+     * @param listener listener the listener to add, not <code>null</code>
+     * @return a handle that can be used for removing the listener
+     */
     public Registration addMarkAllAsReadClickEventListener(ComponentEventListener<NotificationMarkAllAsReadClickEvent> listener) {
         return addListener(NotificationMarkAllAsReadClickEvent.class, listener);
     }
@@ -355,10 +424,9 @@ public class NotificationMenu extends LitTemplate {
      * has to take care of mark all the items as read (e.g. by calling {@link #markAllAsRead() or handling
      * the items}.
      *
+     * @param autoMarkAllAsRead automatically mark all items as read
      * @see #markAllAsRead()
      * @see NotificationMarkAllAsReadClickEvent
-     *
-     * @param autoMarkAllAsRead automatically mark all items as read
      */
     public void setAutoMarkAllAsRead(boolean autoMarkAllAsRead) {
         getElement().setProperty("autoMarkAllAsRead", autoMarkAllAsRead);
@@ -374,6 +442,7 @@ public class NotificationMenu extends LitTemplate {
 
     /**
      * Marks the given items as "read" and informs the client.
+     *
      * @param itemsToMarkAsRead items to be marked as read
      */
     public void markAsRead(NotificationItem... itemsToMarkAsRead) {
@@ -382,6 +451,7 @@ public class NotificationMenu extends LitTemplate {
 
     /**
      * Marks the given items as "read" and informs the client.
+     *
      * @param itemsToMarkAsRead items to be marked as read
      */
     public void markAsRead(Collection<NotificationItem> itemsToMarkAsRead) {
@@ -405,10 +475,25 @@ public class NotificationMenu extends LitTemplate {
         setItems();
     }
 
+    /**
+     * Sets the 'view all' action visibility.
+     * <p></p>
+     * By default, the action 'view all' is visible.
+     *
+     * @param visible {@code true} enable the 'view all' action,
+     *                {@code false} disable it
+     */
     public void setViewAllButtonVisible(boolean visible) {
         viewAllButton.setVisible(visible);
     }
 
+    /**
+     * Sets the 'mark all as read' action visibility.
+     * <p></p>
+     *
+     * @param visible {@code true} enable the 'mark all as read' action,
+     *                {@code false} disable it
+     */
     public void setMarkAllAsReadButtonVisible(boolean visible) {
         markAllAsReadButton.setVisible(visible);
     }
