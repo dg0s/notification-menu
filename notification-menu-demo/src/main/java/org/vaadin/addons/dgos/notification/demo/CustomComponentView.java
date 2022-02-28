@@ -31,7 +31,7 @@ public class CustomComponentView extends VerticalLayout {
     }};
     private final VerticalLayout content;
 
-    private List<NotificationMenu> notificationMenus = new ArrayList<>();
+    private final List<NotificationMenu> notificationMenus = new ArrayList<>();
 
     public CustomComponentView() {
         createToolbar();
@@ -86,26 +86,28 @@ public class CustomComponentView extends VerticalLayout {
         addSubMenuItem(subMenu, NotificationType.DANGER);
         addSubMenuItem(subMenu, NotificationType.UNKNOWN);
 
-        Button clearAll = new Button("Clear all", event -> notificationMenus.forEach(n -> n.setItems()));
+        Button clearAll = new Button("Clear all", event -> notificationMenus.forEach(NotificationMenu::setItems));
 
         actionsLayout.add(left, right, addNotification, new Button("Clear", event -> {
             items.clear();
-            notificationMenus.forEach(n -> n.clearAll());
+            notificationMenus.forEach(NotificationMenu::clearAll);
         }), new Button("Mark all as read", event -> {
-            notificationMenus.forEach(n -> n.markAllAsRead());
+            notificationMenus.forEach(NotificationMenu::markAllAsRead);
         }), new Button("View all", event -> {
-            notificationMenus.forEach(n -> n.viewAll());
+            notificationMenus.forEach(NotificationMenu::viewAll);
         }));
 
 
         Checkbox viewAllVisible = new Checkbox("View all visible", true);
         Checkbox markAllVisible = new Checkbox("Mark all visible", true);
-        HorizontalLayout secondActionLayout = new HorizontalLayout(viewAllVisible, markAllVisible);
+        Checkbox triggerAnimation = new Checkbox("Enable Animation", false);
+        HorizontalLayout secondActionLayout = new HorizontalLayout(viewAllVisible, markAllVisible,triggerAnimation);
         secondActionLayout.setWidthFull();
         secondActionLayout.setJustifyContentMode(JustifyContentMode.CENTER);
 
         viewAllVisible.addValueChangeListener(event -> notificationMenus.forEach(n -> n.setViewAllButtonVisible(event.getValue())));
         markAllVisible.addValueChangeListener(event -> notificationMenus.forEach(n -> n.setMarkAllAsReadButtonVisible(event.getValue())));
+        triggerAnimation.addValueChangeListener(event-> notificationMenus.forEach(n->n.setIconAnimationEnabled(event.getValue())));
 
         add(actionsLayout, secondActionLayout);
     }

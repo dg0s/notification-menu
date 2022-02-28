@@ -16,6 +16,7 @@ import elemental.json.Json;
 import elemental.json.JsonObject;
 import elemental.json.JsonValue;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
@@ -60,7 +61,7 @@ public class NotificationMenu extends LitTemplate {
      *
      * @param orientation the initial orientation of the pop-up
      */
-    public void setOrientation(final Orientation orientation) {
+    public void setOrientation(@NotNull final Orientation orientation) {
         getElement().setProperty("orientation", orientation.getKey());
     }
 
@@ -166,12 +167,26 @@ public class NotificationMenu extends LitTemplate {
     /**
      * Sets whether the icon supports shake animation.
      * <p></p>
+     * @deprecated use {@link #setIconAnimationEnabled} instead.
      *
      * @param ringBellOn {@code true} to enable shake animation on icon,
      *                   {@code false} to disable it
      */
+    @Deprecated
     public void setRingBellOn(final boolean ringBellOn) {
-        getElement().setProperty("ringBell", ringBellOn);
+        setIconAnimationEnabled(ringBellOn);
+    }
+
+    /**
+     * Sets whether the icon supports shake animation.
+     * <p></p>
+     * By default, the icon animation is disabled.
+     * 
+     * @param enable {@code true} to enable shake animation on icon,
+     *                   {@code false} to disable it
+     */
+    public void setIconAnimationEnabled(final boolean enable){
+        getElement().setProperty("enableIconAnimation", enable);
     }
 
     /**

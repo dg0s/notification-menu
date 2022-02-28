@@ -21,7 +21,7 @@ export class NotificationMenu extends LitElement {
     @property({type: String}) labelViewAll = 'View all';
     @property({type: String}) dateTimeFormatPattern = 'YYYY/MM/DD HH:mm';
     @property({type: String}) icon = 'vaadin:bell';
-    @property({type: Boolean}) ringBell = false;
+    @property({type: Boolean}) enableIconAnimation = false;
     @property({type: Boolean}) closeOnClick = true;
     @property({type: Boolean}) autoMarkAllAsRead = true;
     @property({type: Number}) _unread = 0;
@@ -34,8 +34,8 @@ export class NotificationMenu extends LitElement {
     @query('#dialog')
     _dialog!: PaperDialogElement;
 
-    @query('#bell')
-    _bell!: IronIconElement;
+    @query('#icon')
+    _icon!: IronIconElement;
 
     static get styles() {
         return [css`
@@ -98,7 +98,10 @@ export class NotificationMenu extends LitElement {
           .menu-item-header .datetime{
             width: 40%;
             text-align: end;
-            font-size: 12px;
+            font-size: 11px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
           .menu-item .description{
             width: 99%;
@@ -155,29 +158,29 @@ export class NotificationMenu extends LitElement {
             display: inline-block;
           }
 
-          @-webkit-keyframes bell-shake {
+          @-webkit-keyframes animation {
             0%,25%,83%,100% {-webkit-transform: rotatez(0deg);}
             32.5%,62.5% {-webkit-transform: rotatez(-5deg);}
             47.5%,75.5% {-webkit-transform: rotatez(5deg);}
           }
 
-          @-moz-keyframes bell-shake {
+          @-moz-keyframes animation {
             0%,25%,83%,100% {-moz-transform: rotatez(0deg);}
             32.5%,62.5% {-moz-transform: rotatez(-5deg);}
             47.5%,75.5% {-moz-transform: rotatez(5deg);}
           }
 
-          @keyframes bell-shake {
+          @keyframes animation {
             0%,25%,83%,100% {transform: rotatez(0deg);}
             32.5%,62.5% {transform: rotatez(-5deg);}
             47.5%,75.5% {transform: rotatez(5deg);}
           }
 
-          .bell{padding: 2px;}
-          .bell-shake {
-            -webkit-animation: bell-shake 5s ease infinite;
-            -moz-animation: bell-shake 5s ease infinite;
-            animation: bell-shake 5s ease infinite;
+          .icon{padding: 2px;}
+          .animation {
+            -webkit-animation: animation 5s ease infinite;
+            -moz-animation: animation 5s ease infinite;
+            animation: animation 5s ease infinite;
             transform-origin: 50% 0%;
           }
       `];
@@ -187,13 +190,13 @@ export class NotificationMenu extends LitElement {
         return html`
             <div>
                 <vaadin-button theme="icon tertiary" @click="${this._onButtonClick}">
-                    <iron-icon id="bell" class="bell" icon="${this.icon}" slot="prefix"></iron-icon>
+                    <iron-icon id="icon" class="icon" icon="${this.icon}" slot="prefix"></iron-icon>
                     <span class="badge" slot="suffix"
                           ?hidden="${this._unread < 1}">${this._unread > this.maxItemCount ? this.maxItemCountLabel : this._unread}</span>
                 </vaadin-button>
                 <paper-dialog id="dialog" class="dialog" no-overlap horizontal-align="${this.orientation}"
                               vertical-align="top">
-                    <h4 class="menu-header">${this.title}</h4>
+                    <h4 class="menu-header" ?hidden="${this.title === null}">${this.title}</h4>
                     <paper-dialog-scrollable class="menu-scrollable">
                         <div id="content" class="content" style="width:${this.width};height: ${this.height}">
                             ${this.notifications.map(item => html`
@@ -201,7 +204,7 @@ export class NotificationMenu extends LitElement {
                                              @click="${() => this._onItemClicked(item)}">
                                     <div class="menu-item-header">
                                         <span class="title" title="${item.title}"><strong>${item.title}</strong></span>
-                                        <span class="datetime">${moment(item.datetime).format(this.dateTimeFormatPattern)}</span>
+                                        <span class="datetime" title="${moment(item.datetime).format(this.dateTimeFormatPattern)}">${moment(item.datetime).format(this.dateTimeFormatPattern)}</span>
                                     </div>
                                     <div class="description">${item.description}</div>
                                 </vaadin-item>
@@ -318,21 +321,21 @@ export class NotificationMenu extends LitElement {
         this.dispatchEvent(new CustomEvent('mark-all-clicked'));
     }
 
-    _ringBell() {
-        if (this.ringBell) {
-            this._bell.classList.add('bell-shake');
-            setTimeout(() => this._muteBell(), 30000);
+    _enableAnimation() {
+        if (this.enableIconAnimation) {
+            this._icon.classList.add('animation');
+            setTimeout(() => this._disableAnimation(), 30000);
         }
     }
 
-    _muteBell() {
-        this._bell.classList.remove('bell-shake');
+    _disableAnimation() {
+        this._icon.classList.remove('animation');
     }
 
     _calculateUnread(notifications: NotificationItem[]) {
         this._unread = notifications.filter(value => value.read === false).length;
         if (this._unread > 0) {
-            this._ringBell();
+            this._enableAnimation();
         }
     }
 }
