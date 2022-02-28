@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
 
     <properties>
-        <vaadin.version>14.8.3</vaadin.version>
+        <vaadin.version>14.8.4</vaadin.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
