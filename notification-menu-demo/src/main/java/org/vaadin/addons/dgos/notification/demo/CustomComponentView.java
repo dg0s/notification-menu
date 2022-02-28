@@ -31,7 +31,7 @@ public class CustomComponentView extends VerticalLayout {
     }};
     private final VerticalLayout content;
 
-    private List<NotificationMenu> notificationMenus = new ArrayList<>();
+    private final List<NotificationMenu> notificationMenus = new ArrayList<>();
 
     public CustomComponentView() {
         createToolbar();
@@ -44,6 +44,7 @@ public class CustomComponentView extends VerticalLayout {
         createSample("Basic notification");
 
         NotificationMenu maxItemCount = createSample("Custom max item counter");
+        maxItemCount.setTitle(null);
         maxItemCount.setMaxItemCount(5);
         maxItemCount.setMaxItemCountLabel("Max.");
 
@@ -86,15 +87,15 @@ public class CustomComponentView extends VerticalLayout {
         addSubMenuItem(subMenu, NotificationType.DANGER);
         addSubMenuItem(subMenu, NotificationType.UNKNOWN);
 
-        Button clearAll = new Button("Clear all", event -> notificationMenus.forEach(n -> n.setItems()));
+        Button clearAll = new Button("Clear all", event -> notificationMenus.forEach(NotificationMenu::setItems));
 
         actionsLayout.add(left, right, addNotification, new Button("Clear", event -> {
             items.clear();
-            notificationMenus.forEach(n -> n.clearAll());
+            notificationMenus.forEach(NotificationMenu::clearAll);
         }), new Button("Mark all as read", event -> {
-            notificationMenus.forEach(n -> n.markAllAsRead());
+            notificationMenus.forEach(NotificationMenu::markAllAsRead);
         }), new Button("View all", event -> {
-            notificationMenus.forEach(n -> n.viewAll());
+            notificationMenus.forEach(NotificationMenu::viewAll);
         }));
 
 

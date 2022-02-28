@@ -16,6 +16,7 @@ import elemental.json.Json;
 import elemental.json.JsonObject;
 import elemental.json.JsonValue;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
@@ -60,7 +61,7 @@ public class NotificationMenu extends LitTemplate {
      *
      * @param orientation the initial orientation of the pop-up
      */
-    public void setOrientation(final Orientation orientation) {
+    public void setOrientation(@NotNull final Orientation orientation) {
         getElement().setProperty("orientation", orientation.getKey());
     }
 

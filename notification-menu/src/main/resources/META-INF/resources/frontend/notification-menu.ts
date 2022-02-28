@@ -193,7 +193,7 @@ export class NotificationMenu extends LitElement {
                 </vaadin-button>
                 <paper-dialog id="dialog" class="dialog" no-overlap horizontal-align="${this.orientation}"
                               vertical-align="top">
-                    <h4 class="menu-header">${this.title}</h4>
+                    <h4 class="menu-header" ?hidden="${this.title === null}">${this.title}</h4>
                     <paper-dialog-scrollable class="menu-scrollable">
                         <div id="content" class="content" style="width:${this.width};height: ${this.height}">
                             ${this.notifications.map(item => html`
