@@ -44,6 +44,7 @@ public class CustomComponentView extends VerticalLayout {
         createSample("Basic notification");
 
         NotificationMenu maxItemCount = createSample("Custom max item counter");
+        maxItemCount.setTitle(null);
         maxItemCount.setMaxItemCount(5);
         maxItemCount.setMaxItemCountLabel("Max.");
 
