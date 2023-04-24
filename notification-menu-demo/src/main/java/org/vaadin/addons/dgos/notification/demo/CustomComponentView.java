@@ -4,7 +4,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.contextmenu.SubMenu;
-import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
@@ -13,16 +12,12 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
-import org.vaadin.addons.dgos.notification.NotificationItem;
-import org.vaadin.addons.dgos.notification.NotificationMenu;
-import org.vaadin.addons.dgos.notification.NotificationType;
-import org.vaadin.addons.dgos.notification.Orientation;
+import org.vaadin.addons.dgos.notification.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Route(value = "")
-@CssImport("./custom-colors.css")
 public class CustomComponentView extends VerticalLayout {
 
     static final List<NotificationItem> items = new ArrayList<NotificationItem>() {{
@@ -52,11 +47,13 @@ public class CustomComponentView extends VerticalLayout {
         customIcon.setIcon(VaadinIcon.MAILBOX);
 
         // i18n German
+        NotificationI18N notificationI18N = new NotificationI18N().setTitle("Benachrichtigungen")
+                .setCaptionViewAll("Alle öffnen")
+                .setCaptionMarkAllAsRead("Alle als gelesen markieren")
+                .setDateTimeFormatPattern("dd.mm.yyyy HH:mm");
+
         NotificationMenu i18n = createSample("i18n");
-        i18n.setTitle("Benachrichtigungen");
-        i18n.setDateTimeFormatPattern("dd.MM.yyyy, HH:mm");
-        i18n.setLabelViewAll("Alle öffnen");
-        i18n.setLabelMarkAllAsRead("Alle als gelesen markieren");
+        i18n.setI18n(notificationI18N);
 
         NotificationMenu customColors = createSample("Custom colors");
         customColors.addClassName("custom-colors");
@@ -99,16 +96,18 @@ public class CustomComponentView extends VerticalLayout {
         }));
 
 
+        Checkbox showHeader = new Checkbox("Show Header", true);
         Checkbox viewAllVisible = new Checkbox("View all visible", true);
         Checkbox markAllVisible = new Checkbox("Mark all visible", true);
         Checkbox triggerAnimation = new Checkbox("Enable Animation", false);
-        HorizontalLayout secondActionLayout = new HorizontalLayout(viewAllVisible, markAllVisible,triggerAnimation);
+        HorizontalLayout secondActionLayout = new HorizontalLayout(showHeader, viewAllVisible, markAllVisible, triggerAnimation);
         secondActionLayout.setWidthFull();
         secondActionLayout.setJustifyContentMode(JustifyContentMode.CENTER);
 
+        showHeader.addValueChangeListener(event->notificationMenus.forEach(n->n.setHeaderVisible(event.getValue())));
         viewAllVisible.addValueChangeListener(event -> notificationMenus.forEach(n -> n.setViewAllButtonVisible(event.getValue())));
         markAllVisible.addValueChangeListener(event -> notificationMenus.forEach(n -> n.setMarkAllAsReadButtonVisible(event.getValue())));
-        triggerAnimation.addValueChangeListener(event-> notificationMenus.forEach(n->n.setIconAnimationEnabled(event.getValue())));
+        triggerAnimation.addValueChangeListener(event -> notificationMenus.forEach(n -> n.setAnimationEnable(event.getValue())));
 
         add(actionsLayout, secondActionLayout);
     }

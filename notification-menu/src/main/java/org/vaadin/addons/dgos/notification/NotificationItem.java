@@ -1,25 +1,22 @@
 package org.vaadin.addons.dgos.notification;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 public class NotificationItem {
-    @JsonProperty
+
     private final String key;
-    @JsonProperty
+
     private final String type;
-    @JsonProperty
+
     private final String title;
-    @JsonProperty
+
     private final String description;
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @JsonProperty
-    private final LocalDateTime datetime;
-    @JsonProperty
+
+    private final String datetime;
+
     private boolean read;
 
     public NotificationItem(NotificationType type, String title, String description) {
@@ -34,7 +31,7 @@ public class NotificationItem {
         this.type = type.name().toLowerCase();
         this.title = title;
         this.description = description;
-        this.datetime = datetime;
+        this.datetime = Optional.ofNullable(datetime).map(LocalDateTime::toString).orElse(null);
         this.read = read;
     }
 
@@ -54,7 +51,7 @@ public class NotificationItem {
         return description;
     }
 
-    public LocalDateTime getDatetime() {
+    public String getDatetime() {
         return datetime;
     }
 

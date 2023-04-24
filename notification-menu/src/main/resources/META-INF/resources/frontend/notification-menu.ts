@@ -16,10 +16,6 @@ export class NotificationMenu extends LitElement {
     @property({type: String}) width = "auto";
     @property({type: String}) height = "270px";
     @property({type: String}) orientation = 'left';
-    @property({type: String}) title = 'Notifications';
-    @property({type: String}) labelMarkAllAsRead = 'Mark all as read';
-    @property({type: String}) labelViewAll = 'View all';
-    @property({type: String}) dateTimeFormatPattern = 'YYYY/MM/DD HH:mm';
     @property({type: String}) icon = 'vaadin:bell';
     @property({type: Boolean}) enableIconAnimation = false;
     @property({type: Boolean}) closeOnClick = true;
@@ -27,6 +23,9 @@ export class NotificationMenu extends LitElement {
     @property({type: Number}) _unread = 0;
     @property({type: Number}) maxItemCount = 99;
     @property({type: String}) maxItemCountLabel = "+99";
+
+    @state()
+    private i18n: NotificationI18N = {title: 'Notifications', captionViewAll: 'View all', captionMarkAllAsRead: 'Mark all as read', dateTimeFormatPattern: 'YYYY/MM/DD HH:mm'};
 
     @state()
     private notifications: NotificationItem[] = [];
@@ -196,7 +195,7 @@ export class NotificationMenu extends LitElement {
                 </vaadin-button>
                 <paper-dialog id="dialog" class="dialog" no-overlap horizontal-align="${this.orientation}"
                               vertical-align="top">
-                    <h4 class="menu-header" ?hidden="${this.title === null}">${this.title}</h4>
+                    <h4 id="notification-header" class="menu-header">${this.i18n.title}</h4>
                     <paper-dialog-scrollable class="menu-scrollable">
                         <div id="content" class="content" style="width:${this.width};height: ${this.height}">
                             ${this.notifications.map(item => html`
@@ -204,7 +203,7 @@ export class NotificationMenu extends LitElement {
                                              @click="${() => this._onItemClicked(item)}">
                                     <div class="menu-item-header">
                                         <span class="title" title="${item.title}"><strong>${item.title}</strong></span>
-                                        <span class="datetime" title="${moment(item.datetime).format(this.dateTimeFormatPattern)}">${moment(item.datetime).format(this.dateTimeFormatPattern)}</span>
+                                        <span class="datetime" title="${moment(item.datetime).format(this.i18n.dateTimeFormatPattern)}">${moment(item.datetime).format(this.i18n.dateTimeFormatPattern)}</span>
                                     </div>
                                     <div class="description">${item.description}</div>
                                 </vaadin-item>
@@ -212,8 +211,8 @@ export class NotificationMenu extends LitElement {
                         </div>
                     </paper-dialog-scrollable>
                     <div class="menu-item-footer">
-                        <h4 id="view-all" class="menu-header"><span @click="${this._onViewAll}">${this.labelViewAll}</span></h4>
-                        <h4 id="mark-all-as-read"class="menu-header"><span @click="${this._onMarkAllAsRead}">${this.labelMarkAllAsRead}</span></h4>
+                        <h4 id="view-all" class="menu-header"><span @click="${this._onViewAll}">${this.i18n.captionViewAll}</span></h4>
+                        <h4 id="mark-all-as-read"class="menu-header"><span @click="${this._onMarkAllAsRead}">${this.i18n.captionMarkAllAsRead}</span></h4>
                     </div>
                 </paper-dialog>
             </div>
@@ -299,6 +298,10 @@ export class NotificationMenu extends LitElement {
         this.requestUpdate("notifications");
     }
 
+    updateI18n(i18n: NotificationI18N){
+        this.i18n = Object.assign({},this.i18n,i18n);
+    }
+
     _onItemClicked(item: NotificationItem) {
         if (this.closeOnClick) {
             this.close();
@@ -347,4 +350,11 @@ export interface NotificationItem {
     description?: string;
     datetime?: Date;
     read?: Boolean;
+}
+
+export interface NotificationI18N {
+    title: string;
+    captionViewAll: string;
+    captionMarkAllAsRead: string;
+    dateTimeFormatPattern: string;
 }

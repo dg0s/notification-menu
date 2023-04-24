@@ -1,9 +1,5 @@
 package org.vaadin.addons.dgos.notification;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.NpmPackage;
@@ -11,16 +7,17 @@ import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.littemplate.LitTemplate;
 import com.vaadin.flow.component.template.Id;
+import com.vaadin.flow.function.SerializableConsumer;
+import com.vaadin.flow.internal.JsonSerializer;
 import com.vaadin.flow.shared.Registration;
-import elemental.json.Json;
-import elemental.json.JsonObject;
-import elemental.json.JsonValue;
+import elemental.json.*;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * A Designer generated component for the notification-button template.
@@ -36,12 +33,10 @@ import java.util.Locale;
 @NpmPackage(value = "@polymer/paper-dialog-scrollable", version = "^3.0.1")
 @Tag("notification-menu")
 @JsModule("./notification-menu.ts")
-public class NotificationMenu extends LitTemplate {
+public class NotificationMenu extends LitTemplate implements HasSize {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
-    public static final String DEFAULT_DATE_TIME_FORMAT_PATTERN = "YYYY/MM/DD HH:mm";
-    public static final String DEFAULT_LABEL_MARK_ALL_AS_READ = "Mark all as read";
-    public static final String DEFAULT_LABEL_VIEW_ALL = "View all";
+    @Id("notification-header")
+    private H4 header;
 
     @Id("view-all")
     private H4 viewAllButton;
@@ -49,10 +44,7 @@ public class NotificationMenu extends LitTemplate {
     @Id("mark-all-as-read")
     private H4 markAllAsReadButton;
 
-    public NotificationMenu() {
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-    }
+    private NotificationI18N i18n;
 
     /**
      * Sets the orientation of this component.
@@ -84,20 +76,22 @@ public class NotificationMenu extends LitTemplate {
      *
      * @param title the title value to set, or <code>null</code> to remove any
      *              previously set title
+     * @deprecated use {@link #setI18n(NotificationI18N)} instead.
      */
+    @Deprecated
     public void setTitle(final String title) {
         getElement().setProperty("title", title);
     }
 
     /**
-     * Sets the maximal item count. When the item count is above that maximum, the count will be repelaced
+     * Sets the maximal item count. When the item count is above that maximum, the count will be replaced
      * with the maxItemCountLabel. As soon as the item count is equal or below the maximum, it will show the
      * real count again.
      * <p></p>
      * The boolean parameter indicates, if the maximum item count label shall be updated automatically (true).
      * In that case the label will be based on the given max item count plus some "above" indicator.
      * <p></p>
-     * Must be a number higher then 0.
+     * Must be a number higher than 0.
      *
      * @param maxItemCount            maximal item count to show
      * @param updateMaxItemCountLabel update the maximum item count label
@@ -113,7 +107,7 @@ public class NotificationMenu extends LitTemplate {
     }
 
     /**
-     * Returns the maximal item count. By default 99.
+     * Returns the maximal item count. By default, 99.
      *
      * @return max item count
      */
@@ -122,11 +116,11 @@ public class NotificationMenu extends LitTemplate {
     }
 
     /**
-     * Sets the maximal item count. When the item count is above that maximum, the count will be repelaced
+     * Sets the maximal item count. When the item count is above that maximum, the count will be replaced
      * with the maxItemCountLabel. As soon as the item count is equal or below the maximum, it will show the
      * real count again.
      * <p></p>
-     * Must be a number higher then 0.
+     * Must be a number higher than 0.
      *
      * @param maxItemCount maximal item count to show
      */
@@ -156,36 +150,28 @@ public class NotificationMenu extends LitTemplate {
         getElement().setProperty("maxItemCountLabel", maxItemCountLabel != null ? maxItemCountLabel : "+" + getMaxItemCount());
     }
 
-    public void setWidth(final String width) {
-        getElement().setProperty("width", width);
-    }
-
-    public void setHeight(final String height) {
-        getElement().setProperty("height", height);
-    }
-
     /**
      * Sets whether the icon supports shake animation.
      * <p></p>
-     * @deprecated use {@link #setIconAnimationEnabled} instead.
      *
      * @param ringBellOn {@code true} to enable shake animation on icon,
      *                   {@code false} to disable it
+     * @deprecated use {@link #setAnimationEnable} instead.
      */
     @Deprecated
     public void setRingBellOn(final boolean ringBellOn) {
-        setIconAnimationEnabled(ringBellOn);
+        setAnimationEnable(ringBellOn);
     }
 
     /**
      * Sets whether the icon supports shake animation.
      * <p></p>
      * By default, the icon animation is disabled.
-     * 
+     *
      * @param enable {@code true} to enable shake animation on icon,
-     *                   {@code false} to disable it
+     *               {@code false} to disable it
      */
-    public void setIconAnimationEnabled(final boolean enable){
+    public void setAnimationEnable(final boolean enable) {
         getElement().setProperty("enableIconAnimation", enable);
     }
 
@@ -208,13 +194,9 @@ public class NotificationMenu extends LitTemplate {
     }
 
     public void setItems(Collection<NotificationItem> items) {
-        try {
-            final String data = objectMapper.writeValueAsString(items);
-            final JsonValue value = Json.instance().parse(data);
-            getElement().setPropertyJson("notifications", value);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        JsonArray jsonArray = JsonSerializer.toJson(items);
+        JsonValue value = Json.instance().parse(jsonArray.toJson());
+        getElement().setPropertyJson("notifications", value);
     }
 
     /**
@@ -234,13 +216,9 @@ public class NotificationMenu extends LitTemplate {
      * @param itemsToAdd items to add
      */
     public void addItems(Collection<NotificationItem> itemsToAdd) {
-        try {
-            final String data = objectMapper.writeValueAsString(itemsToAdd);
-            final JsonValue value = Json.instance().parse(data);
-            getElement().callJsFunction("addItems", value);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        JsonArray jsonArray = JsonSerializer.toJson(itemsToAdd);
+        JsonValue value = Json.instance().parse(jsonArray.toJson());
+        getElement().callJsFunction("addItems", value);
     }
 
     /**
@@ -264,13 +242,9 @@ public class NotificationMenu extends LitTemplate {
      * @param itemsToUpdate items to update
      */
     public void updateItems(Collection<NotificationItem> itemsToUpdate) {
-        try {
-            final String data = objectMapper.writeValueAsString(itemsToUpdate);
-            final JsonValue value = Json.instance().parse(data);
-            getElement().callJsFunction("updateItems", value);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        JsonArray jsonArray = JsonSerializer.toJson(itemsToUpdate);
+        final JsonValue value = Json.instance().parse(jsonArray.toJson());
+        getElement().callJsFunction("updateItems", value);
     }
 
     /**
@@ -290,73 +264,9 @@ public class NotificationMenu extends LitTemplate {
      * @param itemsToRemove items to remove
      */
     public void removeItems(Collection<NotificationItem> itemsToRemove) {
-        try {
-            final String data = objectMapper.writeValueAsString(itemsToRemove);
-            final JsonValue value = Json.instance().parse(data);
-            getElement().callJsFunction("removeItems", value);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Returns the pattern used to format the date time of a notification item. By default "YYYY/MM/DD HH:mm".
-     *
-     * @return date time format pattern
-     */
-    public String getDateTimeFormatPattern() {
-        return getElement().getProperty("dateTimeFormatPattern", DEFAULT_DATE_TIME_FORMAT_PATTERN);
-    }
-
-    /**
-     * Sets the pattern used to format the date time of a notification item. By default "YYYY/MM/DD HH:mm".
-     * <p></p>
-     * Passing null will reset it to its default.
-     *
-     * @param pattern pattern
-     */
-    public void setDateTimeFormatPattern(String pattern) {
-        getElement().setProperty("dateTimeFormatPattern", pattern != null ? pattern : DEFAULT_DATE_TIME_FORMAT_PATTERN);
-    }
-
-    /**
-     * Returns the label to be used for the "View all" button in the popup. By default "View all".
-     *
-     * @return view all label
-     */
-    public String getLabelViewAll() {
-        return getElement().getProperty("labelViewAll", DEFAULT_LABEL_VIEW_ALL);
-    }
-
-    /**
-     * Sets the label to be used for the "View all" button in the popup. By default "View all".
-     * <p></p>
-     * Passing null will reset it to its default.
-     *
-     * @param labelViewAll view all label
-     */
-    public void setLabelViewAll(String labelViewAll) {
-        getElement().setProperty("labelViewAll", labelViewAll != null ? labelViewAll : DEFAULT_LABEL_VIEW_ALL);
-    }
-
-    /**
-     * Returns the label to be used for the "Mark as read" button in the popup. By default "Mark as read".
-     *
-     * @return mark all as read label
-     */
-    public String getLabelMarkAllAsRead() {
-        return getElement().getProperty("labelMarkAllAsRead", DEFAULT_LABEL_MARK_ALL_AS_READ);
-    }
-
-    /**
-     * Sets the label to be used for the "Mark all as read" button in the popup. By default "Mark all as read".
-     * <p></p>
-     * Passing null will reset it to its default.
-     *
-     * @param labelMarkAllAsRead mark al as read label
-     */
-    public void setLabelMarkAllAsRead(String labelMarkAllAsRead) {
-        getElement().setProperty("labelMarkAllAsRead", labelMarkAllAsRead != null ? labelMarkAllAsRead : DEFAULT_LABEL_MARK_ALL_AS_READ);
+        JsonArray jsonArray = JsonSerializer.toJson(itemsToRemove);
+        JsonValue value = Json.instance().parse(jsonArray.toJson());
+        getElement().callJsFunction("removeItems", value);
     }
 
     /**
@@ -435,7 +345,7 @@ public class NotificationMenu extends LitTemplate {
      * keep them as they are (false). In both cases the {@link NotificationMarkAllAsReadClickEvent}
      * event is fired.
      * <p></p>
-     * By default clicking "mark all as read" only fires an event to the server. In that case the server
+     * By default, clicking "mark all as read" only fires an event to the server. In that case the server
      * has to take care of mark all the items as read (e.g. by calling {@link #markAllAsRead() or handling
      * the items}.
      *
@@ -491,6 +401,18 @@ public class NotificationMenu extends LitTemplate {
     }
 
     /**
+     * Sets the header visibility.
+     * <p></p>
+     * By default, the header is visible.
+     *
+     * @param visible {@code true} enable the header,
+     *                {@code false} disable it
+     */
+    public void setHeaderVisible(boolean visible) {
+        header.setVisible(visible);
+    }
+
+    /**
      * Sets the 'view all' action visibility.
      * <p></p>
      * By default, the action 'view all' is visible.
@@ -511,6 +433,35 @@ public class NotificationMenu extends LitTemplate {
      */
     public void setMarkAllAsReadButtonVisible(boolean visible) {
         markAllAsReadButton.setVisible(visible);
+    }
+
+    /**
+     * Get the internationalization object previously set for this component.
+     * <p></p>
+     *
+     * @return the object with the i18n properties. If the i18n properties
+     *         weren't set, the object will return <code>null</code>.
+     */
+    public NotificationI18N getI18n() {
+        return i18n;
+    }
+
+    /**
+     * Set the internationalization properties for this component.
+     *
+     * @param i18n
+     *            the internationalized properties, not <code>null</code>
+     */
+    public void setI18n(NotificationI18N i18n) {
+        Objects.requireNonNull(i18n,
+                "The I18N properties object should not be null");
+        this.i18n = i18n;
+
+        runBeforeClientResponse(ui -> {
+            if (i18n == this.i18n) {
+                setI18nWithJS();
+            }
+        });
     }
 
     @DomEvent("view-all-clicked")
@@ -541,5 +492,26 @@ public class NotificationMenu extends LitTemplate {
         public NotificationItem getSelectedItem() {
             return selectedItem;
         }
+    }
+
+    private void setI18nWithJS() {
+        JsonObject i18nJson = (JsonObject) JsonSerializer.toJson(this.i18n);
+        deeplyRemoveNullValuesFromJsonObject(i18nJson);
+        getElement().callJsFunction("updateI18n", i18nJson);
+    }
+
+    private void deeplyRemoveNullValuesFromJsonObject(JsonObject jsonObject) {
+        for (String key : jsonObject.keys()) {
+            if (jsonObject.get(key).getType() == JsonType.OBJECT) {
+                deeplyRemoveNullValuesFromJsonObject(jsonObject.get(key));
+            } else if (jsonObject.get(key).getType() == JsonType.NULL) {
+                jsonObject.remove(key);
+            }
+        }
+    }
+
+    void runBeforeClientResponse(SerializableConsumer<UI> command) {
+        getElement().getNode().runWhenAttached(ui -> ui
+                .beforeClientResponse(this, context -> command.accept(ui)));
     }
 }

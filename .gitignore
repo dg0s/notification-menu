@@ -31,3 +31,4 @@ webpack.config.js
 /notification-menu/frontend/generated/index.js.map
 /notification-menu/frontend/generated/vaadin.js
 /notification-menu/frontend/generated/vaadin.js.map
+out

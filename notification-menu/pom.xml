@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.vaadin.addons.dgos</groupId>
@@ -8,7 +10,7 @@
     <packaging>jar</packaging>
 
     <properties>
-        <vaadin.version>14.8.4</vaadin.version>
+        <vaadin.version>14.9.8</vaadin.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -84,7 +86,9 @@
         <pluginRepository>
             <id>vaadin-snapshots</id>
             <url>https://oss.sonatype.org/content/repositories/vaadin-snapshots/</url>
-            <releases><enabled>false</enabled></releases>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
         </pluginRepository>
     </pluginRepositories>
 
@@ -122,11 +126,6 @@
                     <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>2.12.4</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -252,7 +251,7 @@
                         </executions>
                         <configuration>
                             <quiet>true</quiet>
-<!--                            <additionalparam>-Xdoclint:none</additionalparam>-->
+                            <!--                            <additionalparam>-Xdoclint:none</additionalparam>-->
                         </configuration>
                     </plugin>
                     <plugin>
@@ -282,7 +281,7 @@
                     <artifactId>flow-server-production-mode</artifactId>
                 </dependency>
             </dependencies>
-            
+
             <build>
                 <plugins>
                     <plugin>
