@@ -49,7 +49,7 @@ to install project, to your maven repository run
 
 The Demo can be run going to the project `notification-menu-demo` and executing the maven goal:
 
-```mvn spring-boot:run```
+```mvn jetty:run```
 
 
 # License & Author

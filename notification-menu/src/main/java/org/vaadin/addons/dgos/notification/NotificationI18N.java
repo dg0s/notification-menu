@@ -82,7 +82,7 @@ public class NotificationI18N implements Serializable {
 
     /**
      * Sets the pattern used to format the date time of a notification item. By default "YYYY/MM/DD HH:mm".
-     * <p></p>
+     * <p>
      * Passing null will reset it to its default.
      *
      * @param pattern date time format pattern

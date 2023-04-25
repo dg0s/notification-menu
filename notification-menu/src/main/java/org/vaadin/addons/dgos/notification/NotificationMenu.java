@@ -21,10 +21,10 @@ import java.util.Objects;
 
 /**
  * A Designer generated component for the notification-button template.
- * <p></p>
+ * <p>
  * Designer will add and remove fields with @Id mappings but
  * does not overwrite or otherwise change this file.
- * <p></p>
+ * <p>
  * Items added to this menu are not cached inside, but seen as volatile. Events will recreate new instances
  * as needed. If you want to cache those items, you have to do that outside of this instance.
  */
@@ -48,7 +48,7 @@ public class NotificationMenu extends LitTemplate implements HasSize {
 
     /**
      * Sets the orientation of this component.
-     * <p></p>
+     * <p>
      * By default, the value is {@link Orientation#LEFT}.
      *
      * @param orientation the initial orientation of the pop-up
@@ -59,7 +59,7 @@ public class NotificationMenu extends LitTemplate implements HasSize {
 
     /**
      * Sets whether the dialog can be closed by click outside the component.
-     * <p></p>
+     * <p>
      * By default, the dialog is closable when click outside the component.
      *
      * @param closeOnClick {@code true} to enable closing the dialog on click outside,
@@ -71,7 +71,7 @@ public class NotificationMenu extends LitTemplate implements HasSize {
 
     /**
      * Sets the title of this component.
-     * <p></p>
+     * <p>
      * The title is shown in the dialog. If the title is <code>null</code> the component header is hidden.
      *
      * @param title the title value to set, or <code>null</code> to remove any
@@ -87,10 +87,10 @@ public class NotificationMenu extends LitTemplate implements HasSize {
      * Sets the maximal item count. When the item count is above that maximum, the count will be replaced
      * with the maxItemCountLabel. As soon as the item count is equal or below the maximum, it will show the
      * real count again.
-     * <p></p>
+     * <p>
      * The boolean parameter indicates, if the maximum item count label shall be updated automatically (true).
      * In that case the label will be based on the given max item count plus some "above" indicator.
-     * <p></p>
+     * <p>
      * Must be a number higher than 0.
      *
      * @param maxItemCount            maximal item count to show
@@ -119,7 +119,7 @@ public class NotificationMenu extends LitTemplate implements HasSize {
      * Sets the maximal item count. When the item count is above that maximum, the count will be replaced
      * with the maxItemCountLabel. As soon as the item count is equal or below the maximum, it will show the
      * real count again.
-     * <p></p>
+     * <p>
      * Must be a number higher than 0.
      *
      * @param maxItemCount maximal item count to show
@@ -140,7 +140,7 @@ public class NotificationMenu extends LitTemplate implements HasSize {
     /**
      * Sets a placeholder / label that shall be shown, when the maximal item count is reached (i. e. greater than).
      * Setting null will reset it to its default ("+" plus the current max item count).
-     * <p></p>
+     * <p>
      * You may set any string you like, but please remember, that it will be shown inside the small counter circle
      * and thus may exceed its boundaries.
      *
@@ -152,7 +152,7 @@ public class NotificationMenu extends LitTemplate implements HasSize {
 
     /**
      * Sets whether the icon supports shake animation.
-     * <p></p>
+     * <p>
      *
      * @param ringBellOn {@code true} to enable shake animation on icon,
      *                   {@code false} to disable it
@@ -165,7 +165,7 @@ public class NotificationMenu extends LitTemplate implements HasSize {
 
     /**
      * Sets whether the icon supports shake animation.
-     * <p></p>
+     * <p>
      * By default, the icon animation is disabled.
      *
      * @param enable {@code true} to enable shake animation on icon,
@@ -224,7 +224,7 @@ public class NotificationMenu extends LitTemplate implements HasSize {
     /**
      * Resend the given items to the client to update them. Items are mapped by their keys
      * ({@link NotificationItem#getKey()}).
-     * <p></p>
+     * <p>
      * Use this method if only a subset of items has changed.
      *
      * @param itemsToUpdate items to update
@@ -236,7 +236,7 @@ public class NotificationMenu extends LitTemplate implements HasSize {
     /**
      * Resend the given items to the client to update them. Items are mapped by their keys
      * ({@link NotificationItem#getKey()}).
-     * <p></p>
+     * <p>
      * Use this method if only a subset of items has changed.
      *
      * @param itemsToUpdate items to update
@@ -310,7 +310,7 @@ public class NotificationMenu extends LitTemplate implements HasSize {
 
     /**
      * Adds a click listener to an item of this component.
-     * <p></p>
+     * <p>
      *
      * @param listener the listener to add, not <code>null</code>
      * @return a handle that can be used for removing the listener
@@ -321,7 +321,7 @@ public class NotificationMenu extends LitTemplate implements HasSize {
 
     /**
      * Adds a click listener to 'view all' action of this component.
-     * <p></p>
+     * <p>
      *
      * @param listener listener the listener to add, not <code>null</code>
      * @return a handle that can be used for removing the listener
@@ -344,7 +344,7 @@ public class NotificationMenu extends LitTemplate implements HasSize {
      * Sets, if clicking on mark all as read shall automatically mark the client side items as read (true) or
      * keep them as they are (false). In both cases the {@link NotificationMarkAllAsReadClickEvent}
      * event is fired.
-     * <p></p>
+     * <p>
      * By default, clicking "mark all as read" only fires an event to the server. In that case the server
      * has to take care of mark all the items as read (e.g. by calling {@link #markAllAsRead() or handling
      * the items}.
@@ -402,7 +402,7 @@ public class NotificationMenu extends LitTemplate implements HasSize {
 
     /**
      * Sets the header visibility.
-     * <p></p>
+     * <p>
      * By default, the header is visible.
      *
      * @param visible {@code true} enable the header,
@@ -414,7 +414,7 @@ public class NotificationMenu extends LitTemplate implements HasSize {
 
     /**
      * Sets the 'view all' action visibility.
-     * <p></p>
+     * <p>
      * By default, the action 'view all' is visible.
      *
      * @param visible {@code true} enable the 'view all' action,
@@ -426,7 +426,7 @@ public class NotificationMenu extends LitTemplate implements HasSize {
 
     /**
      * Sets the 'mark all as read' action visibility.
-     * <p></p>
+     * <p>
      *
      * @param visible {@code true} enable the 'mark all as read' action,
      *                {@code false} disable it
@@ -437,7 +437,7 @@ public class NotificationMenu extends LitTemplate implements HasSize {
 
     /**
      * Get the internationalization object previously set for this component.
-     * <p></p>
+     * <p>
      *
      * @return the object with the i18n properties. If the i18n properties
      *         weren't set, the object will return <code>null</code>.

@@ -3,16 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.4</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
-
     <artifactId>notification-menu-demo</artifactId>
     <groupId>org.vaadin.addons.dgos</groupId>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.0.6</version>
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
 
@@ -23,6 +16,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
+        <jetty.version>9.4.28.v20200408</jetty.version>
     </properties>
 
     <dependencyManagement>
@@ -101,64 +95,21 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-spring-boot-starter</artifactId>
-            <exclusions>
-                <!-- Excluding so that webjars are not included. -->
-                <exclusion>
-                    <groupId>com.vaadin</groupId>
-                    <artifactId>vaadin-core</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
             <groupId>org.vaadin.artur</groupId>
             <artifactId>a-vaadin-helper</artifactId>
-            <version>1.6.0</version>
+            <version>1.9.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-testbench</artifactId>
             <scope>test</scope>
-        </dependency>
-        <!-- Include JUnit 4 support for TestBench and others -->
-        <dependency>
-            <groupId>org.junit.vintage</groupId>
-            <artifactId>junit-vintage-engine</artifactId>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.hamcrest</groupId>
-                    <artifactId>hamcrest-core</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
             <version>3.8.1</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
         </dependency>
         <dependency>
             <groupId>org.vaadin.addons.dgos</groupId>
@@ -168,19 +119,25 @@
     </dependencies>
 
     <build>
-        <defaultGoal>spring-boot:run</defaultGoal>
+        <defaultGoal>jetty:run</defaultGoal>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <!-- Clean build and startup time for Vaadin apps sometimes may exceed
-                     the default Spring Boot's 30sec timeout.  -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.0</version>
                 <configuration>
-                    <wait>500</wait>
-                    <maxAttempts>240</maxAttempts>
+                    <archive>
+                        <index>true</index>
+                        <manifest>
+                            <addClasspath>false</addClasspath>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Vaadin-Package-Version>1</Vaadin-Package-Version>
+                        </manifestEntries>
+                    </archive>
                 </configuration>
             </plugin>
-
             <!--
                 Take care of synchronizing java dependencies and imports in
                 package.json and main.js files.
@@ -201,6 +158,20 @@
                     <pnpmEnable>true</pnpmEnable>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>${jetty.version}</version>
+                <configuration>
+                    <scanIntervalSeconds>3</scanIntervalSeconds>
+                    <!-- Use test scope because the UI/demo classes are in
+                            the test package. -->
+                    <useTestScope>true</useTestScope>
+                    <supportedPackagings>
+                        <supportedPackaging>jar</supportedPackaging>
+                    </supportedPackagings>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -208,6 +179,19 @@
         <profile>
             <!-- Production mode is activated using -Pproduction -->
             <id>production</id>
+            <dependencies>
+                <!-- Exclude development dependencies from production -->
+                <dependency>
+                    <groupId>com.vaadin</groupId>
+                    <artifactId>vaadin-core</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>com.vaadin</groupId>
+                            <artifactId>vaadin-dev</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+            </dependencies>
             <build>
                 <plugins>
                     <plugin>
@@ -235,18 +219,27 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <groupId>org.eclipse.jetty</groupId>
+                        <artifactId>jetty-maven-plugin</artifactId>
+                        <version>${jetty.version}</version>
+                        <configuration>
+                            <scanIntervalSeconds>0</scanIntervalSeconds>
+                            <supportedPackagings>
+                                <supportedPackaging>jar</supportedPackaging>
+                            </supportedPackagings>
+                            <stopKey>${project.artifactId}</stopKey>
+                            <stopPort>8081</stopPort>
+                        </configuration>
                         <executions>
                             <execution>
-                                <id>start-spring-boot</id>
+                                <id>start-jetty</id>
                                 <phase>pre-integration-test</phase>
                                 <goals>
                                     <goal>start</goal>
                                 </goals>
                             </execution>
                             <execution>
-                                <id>stop-spring-boot</id>
+                                <id>stop-jetty</id>
                                 <phase>post-integration-test</phase>
                                 <goals>
                                     <goal>stop</goal>
@@ -254,11 +247,10 @@
                             </execution>
                         </executions>
                     </plugin>
-
-                    <!-- Runs the integration tests (*IT) after the server is started -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>2.22.2</version>
                         <executions>
                             <execution>
                                 <goals>
@@ -271,6 +263,30 @@
                             <trimStackTrace>false</trimStackTrace>
                             <enableAssertions>true</enableAssertions>
                         </configuration>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <!-- Since the view class is defined in test, after compilation
+                                copy it to the runtime classpath to ensure it gets visited by
+                                  vaadin-maven-plugin -->
+                                <id>copy-test-to-classes</id>
+                                <phase>process-test-classes</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${project.build.testOutputDirectory}</directory>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>

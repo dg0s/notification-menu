@@ -78,6 +78,7 @@ export class NotificationMenu extends LitElement {
             border: 1px solid var(--lumo-contrast-5pct);
             border-left-width: .25rem;
             border-radius: var(--lumo-border-radius);
+            padding-left: 5px;
           }
           .menu-item:hover{
             background-color: var(--lumo-shade-10pct) !important;
@@ -341,6 +342,10 @@ export class NotificationMenu extends LitElement {
             this._enableAnimation();
         }
     }
+}
+
+if (customElements.get('notification-menu') === undefined) {
+    customElements.define('notification-menu', NotificationMenu);
 }
 
 export interface NotificationItem {

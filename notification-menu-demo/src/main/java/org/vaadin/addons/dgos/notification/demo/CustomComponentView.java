@@ -104,7 +104,7 @@ public class CustomComponentView extends VerticalLayout {
         secondActionLayout.setWidthFull();
         secondActionLayout.setJustifyContentMode(JustifyContentMode.CENTER);
 
-        showHeader.addValueChangeListener(event->notificationMenus.forEach(n->n.setHeaderVisible(event.getValue())));
+        showHeader.addValueChangeListener(event -> notificationMenus.forEach(n -> n.setHeaderVisible(event.getValue())));
         viewAllVisible.addValueChangeListener(event -> notificationMenus.forEach(n -> n.setViewAllButtonVisible(event.getValue())));
         markAllVisible.addValueChangeListener(event -> notificationMenus.forEach(n -> n.setMarkAllAsReadButtonVisible(event.getValue())));
         triggerAnimation.addValueChangeListener(event -> notificationMenus.forEach(n -> n.setAnimationEnable(event.getValue())));
