@@ -12,7 +12,6 @@ import com.vaadin.flow.internal.JsonSerializer;
 import com.vaadin.flow.shared.Registration;
 import elemental.json.*;
 
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
@@ -53,7 +52,8 @@ public class NotificationMenu extends LitTemplate implements HasSize {
      *
      * @param orientation the initial orientation of the pop-up
      */
-    public void setOrientation(@NotNull final Orientation orientation) {
+    public void setOrientation(final Orientation orientation) {
+        Objects.requireNonNull(orientation, "The 'orientation' object should not be null");
         getElement().setProperty("orientation", orientation.getKey());
     }
 
@@ -450,7 +450,7 @@ public class NotificationMenu extends LitTemplate implements HasSize {
      * <p>
      *
      * @return the object with the i18n properties. If the i18n properties
-     *         weren't set, the object will return <code>null</code>.
+     * weren't set, the object will return <code>null</code>.
      */
     public NotificationI18N getI18n() {
         return i18n;
@@ -459,8 +459,7 @@ public class NotificationMenu extends LitTemplate implements HasSize {
     /**
      * Set the internationalization properties for this component.
      *
-     * @param i18n
-     *            the internationalized properties, not <code>null</code>
+     * @param i18n the internationalized properties, not <code>null</code>
      */
     public void setI18n(NotificationI18N i18n) {
         Objects.requireNonNull(i18n,
