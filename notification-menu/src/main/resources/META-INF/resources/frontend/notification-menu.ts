@@ -2,11 +2,12 @@ import {css, customElement, html, LitElement, property, PropertyValues, state, q
 import '@polymer/paper-dialog/paper-dialog.js';
 import '@vaadin/vaadin-button/vaadin-button.js';
 import '@vaadin/vaadin-item/vaadin-item.js';
-import '@polymer/iron-icon/iron-icon.js';
 import {PaperDialogElement} from "@polymer/paper-dialog";
 import '@vaadin/vaadin-lumo-styles/style.js';
 import '@vaadin/vaadin-lumo-styles/sizing.js';
+import '@polymer/iron-icon/iron-icon.js';
 import {IronIconElement} from "@polymer/iron-icon";
+import '@vaadin/vaadin-icons/vaadin-icons.js';
 
 const moment = require("moment");
 

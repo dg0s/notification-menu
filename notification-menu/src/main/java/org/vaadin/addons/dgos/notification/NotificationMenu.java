@@ -189,10 +189,20 @@ public class NotificationMenu extends LitTemplate implements HasSize {
         getElement().executeJs("close");
     }
 
+    /**
+     * Sets the given items to this instance. The previous items will be removed.
+     *
+     * @param items items to set
+     */
     public void setItems(NotificationItem... items) {
         setItems(Arrays.asList(items));
     }
 
+    /**
+     * Sets the given items to this instance. The previous items will be removed.
+     *
+     * @param items items to set
+     */
     public void setItems(Collection<NotificationItem> items) {
         JsonArray jsonArray = JsonSerializer.toJson(items);
         JsonValue value = Json.instance().parse(jsonArray.toJson());
