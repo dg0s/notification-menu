@@ -5,12 +5,12 @@
 
     <groupId>org.vaadin.addons.dgos</groupId>
     <artifactId>notification-menu</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
     <name>Notification Menu</name>
     <packaging>jar</packaging>
 
     <properties>
-        <vaadin.version>14.9.8</vaadin.version>
+        <vaadin.version>14.10.0</vaadin.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

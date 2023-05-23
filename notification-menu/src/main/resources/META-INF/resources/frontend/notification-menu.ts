@@ -9,7 +9,7 @@ import '@polymer/iron-icon/iron-icon.js';
 import {IronIconElement} from "@polymer/iron-icon";
 import '@vaadin/vaadin-icons/vaadin-icons.js';
 
-const moment = require("moment");
+import moment from "moment";
 
 @customElement('notification-menu')
 export class NotificationMenu extends LitElement {
