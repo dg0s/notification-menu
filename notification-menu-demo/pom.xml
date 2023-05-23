@@ -5,7 +5,7 @@
 
     <artifactId>notification-menu-demo</artifactId>
     <groupId>org.vaadin.addons.dgos</groupId>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
 
